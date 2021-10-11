@@ -1,6 +1,6 @@
 from pytest import fixture, raises
 
-from pyapp.files import TemperatureFile
+from PyroPara.files import TemperatureFile
 
 
 @fixture

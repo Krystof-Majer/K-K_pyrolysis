@@ -1,4 +1,4 @@
-from pyapp.math import add
+from PyroPara.math import add
 
 
 def test_add():
