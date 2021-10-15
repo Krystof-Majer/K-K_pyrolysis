@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QApplication
 
-from pyapp.gui.windows import MainWindow
+from PyroPara.gui.windows import MainWindow
 
 
 def show():
