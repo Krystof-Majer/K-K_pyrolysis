@@ -1,4 +1,4 @@
-from pyapp.gui import show
+from PyroPara.gui import show
 
 
 def main() -> None:
