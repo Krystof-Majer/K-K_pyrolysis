@@ -1,3 +1,5 @@
+# PyroPara ![tests](https://github.com/Krystof-Majer/PyroPara/actions/workflows/tests.yml/badge.svg)
+
 Application for analysing termogravimetric curves obtaining Arrhenic parameters
 Written in python
 
