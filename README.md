@@ -34,4 +34,4 @@ C:/Python38/python.exe -m venv venv
 
 ## Screenshots
 
-<img align="left" width="357" src="screenshots/1.png"/>
+<img align="left" width="500" src="screenshots/1.png"/>
