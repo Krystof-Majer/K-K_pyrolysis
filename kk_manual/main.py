@@ -1,7 +1,9 @@
+from re import X
 import matplotlib.pyplot as plt
 import numpy as np
 import os.path
-from scipy.signal import savgol_filter
+from scipy.signal import savgol_filter, argrelmin
+
 
 # file init#
 STA_file = ""
@@ -53,16 +55,50 @@ MSL_1_f = savgol_filter(MSL_1_f, 41, 3)
 MSL_2_f = Mass_diff(MSL_1_f, TIME)
 MSL_2_f = savgol_filter(MSL_2_f, 41, 3)
 
-
+# temperatures had to be cut due to shrinking of mass fraction array from differentiations
 TEMPERATURE_1 = TEMPERATURE[2::]
 TEMPERATURE_2 = TEMPERATURE_1[2::]
 
-fig, ax = plt.subplots(3)
+
+fig, ax = plt.subplots(3, sharex=True)
 if exists:
-    ax[0].plot(TEMPERATURE, MASS, "r", alpha=0.3, zorder=1)
-    ax[0].plot(TEMPERATURE, MASS_f, "g", zorder=2)
-    ax[1].plot(TEMPERATURE_1, MSL_1, "r", alpha=0.3, zorder=1)
-    ax[1].plot(TEMPERATURE_1, MSL_1_f, "g", zorder=2)
-    ax[2].plot(TEMPERATURE_2, MSL_2, "r", alpha=0.3, zorder=1)
-    ax[2].plot(TEMPERATURE_2, MSL_2_f, "g", zorder=2)
+    ax[0].plot(TEMPERATURE, MASS, "r", label="unfiltered", alpha=0.3, zorder=1)
+    ax[0].plot(TEMPERATURE, MASS_f, "g", label="filtered", zorder=2)
+    ax[0].legend()
+    ax[0].title.set_text("Mass fraction to Temperature")
+
+    ax[1].plot(
+        TEMPERATURE_1, MSL_1, "r", label="unfiltered", alpha=0.3, zorder=1
+    )
+    ax[1].plot(TEMPERATURE_1, MSL_1_f, "g", label="unfiltered", zorder=2)
+    ax[1].title.set_text("First derivative")
+
+    ax[2].plot(
+        TEMPERATURE_2, MSL_2, "r", label="unfiltered", alpha=0.3, zorder=1
+    )
+    ax[2].plot(TEMPERATURE_2, MSL_2_f, "g", label="filtered", zorder=2)
+    ax[2].title.set_text("Second derivative")
+
+    # searching for local minima in given temperature range between low and high
+    low = 300
+    high = 450
+
+    minTemp = argrelmin(MSL_2_f, order=5)
+    Mpoints = []
+    Tpoints = []
+    for mins in minTemp[0]:
+        if TEMPERATURE_2[mins] >= low and TEMPERATURE_2[mins] <= high:
+            Mpoints.append(MSL_2_f[mins])
+            Tpoints.append(TEMPERATURE_2[mins])
+
+    ax[2].plot(Tpoints, Mpoints, "k", linestyle="none", marker="x", zorder=3)
+
+    #  Axis labels
+    ax[2].set_xlabel("Temperature (K)")
+    ax[0].set_ylabel("Mass (%)")
+    ax[1].set_ylabel("Mass loss rate (%)")
+    ax[2].set_ylabel("MSL deviation (%)")
     plt.show()
+
+for i in range(len(Mpoints)):
+    print([Tpoints[i], Mpoints[i]])
