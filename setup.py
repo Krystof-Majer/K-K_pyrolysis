@@ -14,10 +14,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Krystof-Majer/PyroPara.git",
     license="MIT",
-    install_requires=[
-        "numpy",
-        "PySide6",
-    ],
+    install_requires=["numpy", "PySide6", "matplotlib", "scipy"],
     extras_require={
         "dev": [
             "pytest",
@@ -30,6 +27,8 @@ setup(
             "tox",
             "flake8",
             "coverage",
+            "matplotlib",
+            "scipy",
         ]
     },
     packages=find_packages(exclude=["tests"]),
