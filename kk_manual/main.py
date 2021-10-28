@@ -3,8 +3,6 @@ import numpy as np
 import os.path
 from scipy.signal import savgol_filter
 
-from PyroPara.files import TemperatureFile
-
 # file init#
 STA_file = ""
 
