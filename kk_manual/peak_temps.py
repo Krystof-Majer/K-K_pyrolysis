@@ -4,11 +4,14 @@ import numpy as np
 import os.path
 from scipy.signal import savgol_filter, argrelmin
 
+# Script for manualy find peak decomposition temperatures from single file
+# Used for tuning the process !!NOT FINAL!!
+
 
 # file init#
 STA_file = ""
 
-STA_file = "kk_manual\PYRO_MDF_30_900_N2_10Kmin_01.txt"
+STA_file = "kk_manual\PYRO_MDF_30_900_N2_30Kmin_recal_02.txt"
 exists = os.path.isfile(STA_file)
 
 
@@ -26,6 +29,12 @@ print(TEMPERATURE_STEP) """  # not working
 
 
 def Mass_diff(MASS, TIME):
+    """
+    function to manualy calculate finite difference
+
+
+    """
+
     diff = []
     for i in range(1, len(MASS) - 1):
         m_loss = -(MASS[i + 1] - MASS[i - 1]) / (TIME[i + 1] - TIME[i - 1])
@@ -33,8 +42,8 @@ def Mass_diff(MASS, TIME):
     return diff
 
 
-temperature_step = 10
-dec_koef = 3
+temperature_step = 50  # unused
+dec_koef = 3  # decimation factor for data reduction
 
 
 # reading file
