@@ -36,6 +36,9 @@ high = 500
 # order by which to search minima, higher -> more selective
 minorder = 5
 
+#  True to show plots
+show = False
+
 for file in STA_file:
     exists = os.path.isfile(file)
 
@@ -115,4 +118,5 @@ for file in STA_file:
         for i in range(len(Mpoints)):
             print([Tpoints[i], Mpoints[i]])
 
-        plt.show()
+        if show:
+            plt.show()
