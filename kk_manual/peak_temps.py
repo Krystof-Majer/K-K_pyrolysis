@@ -30,14 +30,14 @@ STA_file = [
 dec_koef = 3
 
 # Searching for local minima in given temperature range between low and high
-low = 200
-high = 500
+low = 450
+high = 750
 
 # order by which to search minima, higher -> more selective
 minorder = 5
 
 #  True to show plots
-show = False
+show = True
 
 for file in STA_file:
     exists = os.path.isfile(file)
@@ -48,7 +48,7 @@ for file in STA_file:
     # reading file
     if exists:
         DATA = np.loadtxt(file, delimiter=",", skiprows=35)
-        TEMPERATURE = DATA[::dec_koef, 0]
+        TEMPERATURE = DATA[::dec_koef, 0] + 273.15
         MASS = DATA[::dec_koef, 3]
         TIME = DATA[::dec_koef, 1]
 
