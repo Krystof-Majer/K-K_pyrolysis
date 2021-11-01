@@ -27,8 +27,6 @@ setup(
             "tox",
             "flake8",
             "coverage",
-            "matplotlib",
-            "scipy",
         ]
     },
     packages=find_packages(exclude=["tests"]),
