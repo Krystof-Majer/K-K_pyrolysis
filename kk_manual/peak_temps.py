@@ -34,7 +34,7 @@ low = 450
 high = 750
 
 # order by which to search minima, higher -> more selective
-minorder = 5
+minorder = 7
 
 #  True to show plots
 show = True
@@ -67,7 +67,7 @@ for file in STA_file:
 
     MSL_2_f = Mass_diff(MSL_1_f, TIME)
 
-    MSL_2_f = savgol_filter(MSL_2_f, 31, 3)
+    MSL_2_f = savgol_filter(MSL_2_f, 21, 3)
     MSL_2_f = savgol_filter(MSL_2_f, 11, 3)
 
     # temperatures had to be cut due to shrinking of mass fraction array from differentiations
@@ -118,5 +118,5 @@ for file in STA_file:
         for i in range(len(Mpoints)):
             print([Tpoints[i], Mpoints[i]])
 
-        if show:
-            plt.show()
+if show:
+    plt.show()
