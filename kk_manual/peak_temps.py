@@ -82,15 +82,15 @@ for file in STA_file:
         )
         ax[0].plot(TEMPERATURE, MASS_f, "g", label="filtered", zorder=2)
         ax[0].legend()
-        ax[0].title.set_text("Mass fraction to Temperature")
+        ax[0].title.set_text("TG")
 
         ax[1].plot(TEMPERATURE_1, MSL_1, "r", alpha=0.3, zorder=1)
         ax[1].plot(TEMPERATURE_1, MSL_1_f, "g", zorder=2)
-        ax[1].title.set_text("First derivative")
+        ax[1].title.set_text("DTG")
 
         ax[2].plot(TEMPERATURE_2, MSL_2, "r", alpha=0.3, zorder=1)
         ax[2].plot(TEMPERATURE_2, MSL_2_f, zorder=2)
-        ax[2].title.set_text("Second derivative")
+        ax[2].title.set_text("DDTG")
 
         minTemp = argrelmin(MSL_2_f, order=minorder)
         Mpoints = []
