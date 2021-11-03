@@ -14,7 +14,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Krystof-Majer/PyroPara.git",
     license="MIT",
-    install_requires=["pyparsing<3", "numpy", "PySide6", "matplotlib", "scipy"],
+    install_requires=["pyparsing<3", "pandas", "PySide6", "matplotlib", "scipy"],
     extras_require={
         "dev": [
             "pytest",
