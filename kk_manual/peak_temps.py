@@ -56,18 +56,18 @@ for file in STA_file:
     MSL_2 = Mass_diff(MSL_1, TIME)
 
     # doubeling filters
-    MASS_f = savgol_filter(MASS, 31, 3)
+    MASS_f = savgol_filter(MASS, 41, 4)
     MASS_f = savgol_filter(MASS_f, 31, 3)
     # MASS_f = MASS
 
     MSL_1_f = Mass_diff(MASS_f, TIME)
 
-    MSL_1_f = savgol_filter(MSL_1_f, 31, 3)
+    MSL_1_f = savgol_filter(MSL_1_f, 41, 4)
     MSL_1_f = savgol_filter(MSL_1_f, 31, 3)
 
     MSL_2_f = Mass_diff(MSL_1_f, TIME)
 
-    MSL_2_f = savgol_filter(MSL_2_f, 31, 3)
+    MSL_2_f = savgol_filter(MSL_2_f, 41, 4)
     MSL_2_f = savgol_filter(MSL_2_f, 31, 3)
 
     # temperatures had to be cut due to shrinking of mass fraction array from differentiations
