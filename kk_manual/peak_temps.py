@@ -27,8 +27,8 @@ STA_file = [
 ]
 
 # decimation factor for data reduction
-dec_koef = 3
-
+dec_koef = [8, 3, 2]
+dec = 0
 # Searching for local minima in given temperature range between low and high
 low = 450
 high = 750
@@ -43,32 +43,32 @@ for file in STA_file:
     exists = os.path.isfile(file)
 
     temperature_step = int(f"{file[29]}{file[30]}")  # Temperature step of data
-    dec_koef = 3  # decimation factor for data reduction
 
     # reading file
     if exists:
         DATA = np.loadtxt(file, delimiter=",", skiprows=35)
-        TEMPERATURE = DATA[::dec_koef, 0] + 273.15
-        MASS = DATA[::dec_koef, 3]
-        TIME = DATA[::dec_koef, 1]
+        TEMPERATURE = DATA[:: dec_koef[dec], 0] + 273.15
+        MASS = DATA[:: dec_koef[dec], 3]
+        TIME = DATA[:: dec_koef[dec], 1]
+        dec += 1
 
     MSL_1 = Mass_diff(MASS, TIME)
     MSL_2 = Mass_diff(MSL_1, TIME)
 
     # doubeling filters
-    MASS_f = savgol_filter(MASS, 21, 3)
-    MASS_f = savgol_filter(MASS_f, 11, 3)
+    MASS_f = savgol_filter(MASS, 31, 3)
+    MASS_f = savgol_filter(MASS_f, 31, 3)
     # MASS_f = MASS
 
     MSL_1_f = Mass_diff(MASS_f, TIME)
 
-    MSL_1_f = savgol_filter(MSL_1_f, 21, 3)
-    MSL_1_f = savgol_filter(MSL_1_f, 11, 3)
+    MSL_1_f = savgol_filter(MSL_1_f, 31, 3)
+    MSL_1_f = savgol_filter(MSL_1_f, 31, 3)
 
     MSL_2_f = Mass_diff(MSL_1_f, TIME)
 
-    MSL_2_f = savgol_filter(MSL_2_f, 21, 3)
-    MSL_2_f = savgol_filter(MSL_2_f, 11, 3)
+    MSL_2_f = savgol_filter(MSL_2_f, 31, 3)
+    MSL_2_f = savgol_filter(MSL_2_f, 31, 3)
 
     # temperatures had to be cut due to shrinking of mass fraction array from differentiations
     TEMPERATURE_1 = TEMPERATURE[2::]
