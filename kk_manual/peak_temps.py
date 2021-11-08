@@ -48,7 +48,7 @@ for file in STA_file:
     if exists:
         DATA = np.loadtxt(file, delimiter=",", skiprows=35)
         TEMPERATURE = DATA[:: dec_koef[dec], 0] + 273.15
-        MASS = DATA[:: dec_koef[dec], 3]
+        MASS = DATA[:: dec_koef[dec], 3] / 100
         TIME = DATA[:: dec_koef[dec], 1]
         dec += 1
 
@@ -88,16 +88,16 @@ for file in STA_file:
         ax[1].plot(TEMPERATURE_1, MSL_1_f, "g", zorder=2)
         ax[1].title.set_text("DTG")
 
-        ax[2].plot(TEMPERATURE_2, MSL_2, "r", alpha=0.3, zorder=1)
-        ax[2].plot(TEMPERATURE_2, MSL_2_f, zorder=2)
+        # ax[2].plot(TEMPERATURE_2, MSL_2, "r", alpha=0.3, zorder=1)
+        ax[2].plot(TEMPERATURE_2, abs(MSL_2_f), zorder=2)
         ax[2].title.set_text("DDTG")
 
-        minTemp = argrelmin(MSL_2_f, order=minorder)
+        minTemp = argrelmin(abs(MSL_2_f), order=minorder)
         Mpoints = []
         Tpoints = []
         for mins in minTemp[0]:
             if TEMPERATURE_2[mins] >= low and TEMPERATURE_2[mins] <= high:
-                Mpoints.append(MSL_2_f[mins])
+                Mpoints.append(abs(MSL_2_f[mins]))
                 Tpoints.append(TEMPERATURE_2[mins])
 
         # ploting local minima points for visual confirmation
@@ -108,8 +108,8 @@ for file in STA_file:
         #  Axis labels
         ax[2].set_xlabel("Temperature (K)")
         ax[0].set_ylabel("Mass (%)")
-        ax[1].set_ylabel("Mass loss rate (%)")
-        ax[2].set_ylabel("MSL deviation (%)")
+        ax[1].set_ylabel("Mass loss rate")
+        ax[2].set_ylabel("MLR deviation")
         fig.suptitle(file, fontsize=16)
 
         print(f"--- points for: {temperature_step} K step ---")
