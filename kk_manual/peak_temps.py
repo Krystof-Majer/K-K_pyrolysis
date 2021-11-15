@@ -1,122 +1,128 @@
 import matplotlib.pyplot as plt
+from os import chdir
+from os.path import dirname
+from glob import glob
+import pandas as pd
+from pandas.core.frame import DataFrame
 import numpy as np
-import os.path
-from scipy.signal import savgol_filter, argrelmin
+from scipy.signal import argrelextrema
 
 # Script for manualy finding peak decomposition temperatures from set of files
 # Used for tuning the process !!NOT FINAL!!
 
-
-def Mass_diff(MASS, TIME):
-    """
-    function to manualy calculate finite difference
-
-    """
-    diff = []
-    for i in range(1, len(MASS) - 1):
-        m_loss = -(MASS[i + 1] - MASS[i - 1]) / (TIME[i + 1] - TIME[i - 1])
-        diff.append(m_loss)
-    return diff
+MINORDER = 7  # number of points to check against VULNERABLE TO DATA SIZE!!!
+MIN_INTERVAL = (
+    300,
+    600,
+)  # Temperature (K) interval to search for mins. Will be bound to filter response
 
 
-# file init#
-STA_file = [
-    "kk_manual\PYRO_MDF_30_900_N2_10Kmin_01.txt",
-    "kk_manual\PYRO_MDF_30_900_N2_30Kmin_recal_02.txt",
-    "kk_manual\PYRO_MDF_30_700_N2_50_Kmin_recal_02.txt",
-]
+def filter(x, y):  # Will be implemented in separate file
+    return y
 
-# decimation factor for data reduction
-dec_koef = [8, 3, 2]
-dec = 0
-# Searching for local minima in given temperature range between low and high
-low = 450
-high = 750
 
-# order by which to search minima, higher -> more selective
-minorder = 7
+def _diff(df: DataFrame):
 
-#  True to show plots
-show = True
+    # derivatives of unfiltered data series
+    df["mass_diff"] = -np.gradient(df.mass, df.time)
+    df["mass_diff2"] = abs(np.gradient(df.mass_diff, df.time))
 
-for file in STA_file:
-    exists = os.path.isfile(file)
+    # derivatives of filtered data series
+    df["mass_filtered"] = filter(df.time, df.mass)
+    df["mass_diff_pre"] = -np.gradient(df.mass_filtered, df.time)
+    df["mass_diff_filtered"] = filter(df.time, df.mass_diff_pre)
+    df["mass_diff2_pre"] = abs(np.gradient(df.mass_diff_filtered, df.time))
+    df["mass_diff2_filtered"] = filter(df.time, df.mass_diff2_pre)
 
-    temperature_step = int(f"{file[29]}{file[30]}")  # Temperature step of data
 
-    # reading file
-    if exists:
-        DATA = np.loadtxt(file, delimiter=",", skiprows=35)
-        TEMPERATURE = DATA[:: dec_koef[dec], 0] + 273.15
-        MASS = DATA[:: dec_koef[dec], 3] / 100
-        TIME = DATA[:: dec_koef[dec], 1]
-        dec += 1
+def get_beta(file_path):
+    # Gets temperature step used in measurements
+    file = open(file_path)
+    for i, line in enumerate(file):
+        if i == 32:
+            try:
+                beta = int(
+                    f"{line[35]}{line[36]}"
+                )  # Hardcoded position from TGA files
+            except ValueError:
+                try:
+                    beta = int(f"{line[35]}")
+                except ValueError:
+                    beta = int(
+                        input(
+                            "Unable to read temperature step from file:\n{file}\n please insert manualy "
+                        )
+                    )
+    print(beta)
+    return beta
 
-    MSL_1 = Mass_diff(MASS, TIME)
-    MSL_2 = Mass_diff(MSL_1, TIME)
 
-    # doubeling filters
-    MASS_f = savgol_filter(MASS, 41, 4)
-    MASS_f = savgol_filter(MASS_f, 31, 3)
-    # MASS_f = MASS
+def process(file_path):
+    df = pd.read_csv(file_path, sep=",", encoding="cp1250", skiprows=34)
+    df.rename(
+        columns={
+            df.columns[0]: "temperature",
+            df.columns[3]: "mass",
+            df.columns[1]: "time",
+        },
+        inplace=True,
+    )
+    df.temperature += 273.15
+    _diff(df)
+    return df
 
-    MSL_1_f = Mass_diff(MASS_f, TIME)
 
-    MSL_1_f = savgol_filter(MSL_1_f, 41, 4)
-    MSL_1_f = savgol_filter(MSL_1_f, 31, 3)
+def get_mins(df: DataFrame):  # TODO: make it work...
+    df["loc_mins"] = argrelextrema(
+        df.mass_diff2_filtered.values, np.less_equal, order=MINORDER
+    )[0]
+    Mpoints = []
+    Tpoints = []
 
-    MSL_2_f = Mass_diff(MSL_1_f, TIME)
+    for mins in df.loc_mins[0]:
+        if (
+            df.temperature[mins] >= MIN_INTERVAL[0]
+            and df.temperature[mins] <= MIN_INTERVAL[1]
+        ):
+            Mpoints.append(df.mass_diff2_filtered[mins])
+            Tpoints.append(df.temperature[mins])
 
-    MSL_2_f = savgol_filter(MSL_2_f, 41, 4)
-    MSL_2_f = savgol_filter(MSL_2_f, 31, 3)
 
-    # temperatures had to be cut due to shrinking of mass fraction array from differentiations
-    TEMPERATURE_1 = TEMPERATURE[2::]
-    TEMPERATURE_2 = TEMPERATURE_1[2::]
-
-    #  Ploting all curves in subplot
+def plot(df: DataFrame, beta: int):
     fig, ax = plt.subplots(3, sharex=True)
-    if exists:
-        ax[0].plot(
-            TEMPERATURE, MASS, "r", label="unfiltered", alpha=0.3, zorder=1
-        )
-        ax[0].plot(TEMPERATURE, MASS_f, "g", label="filtered", zorder=2)
-        ax[0].legend()
-        ax[0].title.set_text("TG")
+    fig.suptitle(f"{beta} K", fontsize=16)
 
-        ax[1].plot(TEMPERATURE_1, MSL_1, "r", alpha=0.3, zorder=1)
-        ax[1].plot(TEMPERATURE_1, MSL_1_f, "g", zorder=2)
-        ax[1].title.set_text("DTG")
+    ax[0].title.set_text("TG")
+    ax[0].plot(df.temperature, df.mass, "r", alpha=0.3)
+    ax[0].plot(df.temperature, df.mass_filtered, "-")
 
-        # ax[2].plot(TEMPERATURE_2, MSL_2, "r", alpha=0.3, zorder=1)
-        ax[2].plot(TEMPERATURE_2, abs(MSL_2_f), zorder=2)
-        ax[2].title.set_text("DDTG")
+    ax[1].title.set_text("DTG")
+    ax[1].plot(df.temperature, df.mass_diff, "r", alpha=0.3)
+    ax[1].plot(df.temperature, df.mass_diff_filtered, "-")
 
-        minTemp = argrelmin(abs(MSL_2_f), order=minorder)
-        Mpoints = []
-        Tpoints = []
-        for mins in minTemp[0]:
-            if TEMPERATURE_2[mins] >= low and TEMPERATURE_2[mins] <= high:
-                Mpoints.append(abs(MSL_2_f[mins]))
-                Tpoints.append(TEMPERATURE_2[mins])
+    ax[2].title.set_text("DDTG")
+    ax[2].plot(df.temperature, df.mass_diff2, "r", alpha=0.3)
+    ax[2].plot(df.temperature, df.mass_diff2_filtered, "-")
 
-        # ploting local minima points for visual confirmation
-        ax[2].plot(
-            Tpoints, Mpoints, "k", linestyle="none", marker="x", zorder=3
-        )
+    ax[2].set_xlabel("Temperature (K)")
+    ax[0].set_ylabel("Mass (%)")
+    ax[1].set_ylabel("MSL (%)")
+    ax[2].set_ylabel("MSL deviation (%)")
 
-        #  Axis labels
-        ax[2].set_xlabel("Temperature (K)")
-        ax[0].set_ylabel("Mass (%)")
-        ax[1].set_ylabel("Mass loss rate")
-        ax[2].set_ylabel("MLR deviation")
-        fig.suptitle(file, fontsize=16)
 
-        print(f"--- points for: {temperature_step} K step ---")
+def main():
+    # set working directory to where is this script
+    chdir(dirname(__file__))
 
-        #  Output of all found points
-        for i in range(len(Mpoints)):
-            print([Tpoints[i], Mpoints[i]])
+    for file_path in glob("*.txt"):
+        beta = get_beta(file_path)
 
-if show:
+        df = process(file_path)
+        get_mins(df)
+        plot(df, beta)
+
     plt.show()
+
+
+if __name__ == "__main__":
+    main()
