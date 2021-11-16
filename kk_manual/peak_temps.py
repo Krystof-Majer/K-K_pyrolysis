@@ -12,8 +12,8 @@ from scipy.signal import argrelextrema
 
 MINORDER = 7  # number of points to check against VULNERABLE TO DATA SIZE!!!
 MIN_INTERVAL = (
-    300,
-    600,
+    500,
+    750,
 )  # Temperature (K) interval to search for mins. Will be bound to filter response
 
 
@@ -72,23 +72,24 @@ def process(file_path):
     return df
 
 
-def get_mins(df: DataFrame):  # TODO: make it work...
-    df["loc_mins"] = argrelextrema(
-        df.mass_diff2_filtered.values, np.less_equal, order=MINORDER
-    )[0]
+def get_mins(df: DataFrame):
+    loc_mins = argrelextrema(
+        df.mass_diff2_filtered.to_numpy(), np.less_equal, order=MINORDER
+    )
     Mpoints = []
     Tpoints = []
 
-    for mins in df.loc_mins[0]:
+    for mins in loc_mins[0]:
         if (
             df.temperature[mins] >= MIN_INTERVAL[0]
             and df.temperature[mins] <= MIN_INTERVAL[1]
         ):
             Mpoints.append(df.mass_diff2_filtered[mins])
             Tpoints.append(df.temperature[mins])
+    return (Tpoints, Mpoints)
 
 
-def plot(df: DataFrame, beta: int):
+def plot(df: DataFrame, beta: int, points: tuple):
     fig, ax = plt.subplots(3, sharex=True)
     fig.suptitle(f"{beta} K", fontsize=16)
 
@@ -109,6 +110,8 @@ def plot(df: DataFrame, beta: int):
     ax[1].set_ylabel("MSL (%)")
     ax[2].set_ylabel("MSL deviation (%)")
 
+    ax[2].plot(points[0], points[1], "kx")
+
 
 def main():
     # set working directory to where is this script
@@ -118,8 +121,8 @@ def main():
         beta = get_beta(file_path)
 
         df = process(file_path)
-        get_mins(df)
-        plot(df, beta)
+        points = get_mins(df)
+        plot(df, beta, points)
 
     plt.show()
 
