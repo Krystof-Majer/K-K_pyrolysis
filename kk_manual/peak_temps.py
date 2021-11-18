@@ -18,30 +18,32 @@ MIN_INTERVAL = (
     500,
     750,
 )
-CUTOFF = 3  # Hz
+CUTOFF = [2.5, 2.5, 2.5, 2.5]  # Hz
 WINSIZE = 41
 F_TYPE = "hamming"
 
 
+def get_cutoff():
+    for c, value in enumerate(CUTOFF):
+        return value
+
+
+#  Hamming filter with cutoff of half of Nqyist frequency
 def filter(x, y):
+    cutoff = get_cutoff()
     sample = 1 / (x[1] - x[0])
     if F_TYPE == "hamming":
-        w = signal.firwin(WINSIZE, CUTOFF / (0.5 * sample), window=F_TYPE)
+        w = signal.firwin(WINSIZE, cutoff / (0.5 * sample), window=F_TYPE)
         return signal.filtfilt(w, 1, y)
 
 
-def _diff(df: DataFrame):  # TODO: make second derivative usable
-
-    # derivatives of unfiltered data series
-    df["mass_diff"] = -np.gradient(df.mass)
-    df["mass_diff2"] = np.gradient(df.mass_diff)
-
-    # derivatives of filtered data series
-    df["mass_filtered"] = filter(df.time, df.mass)
-    df["mass_diff_pre"] = -np.gradient(df.mass_filtered)
-    df["mass_diff_filtered"] = filter(df.time, df.mass_diff_pre)
-    df["mass_diff2_pre"] = np.gradient(df.mass_diff_filtered)
-    df["mass_diff2_filtered"] = filter(df.time, df.mass_diff2_pre)
+# unused
+""" def _diff(time, mass):
+    m = []
+    for i in range(1, len(mass) - 1):
+        diff = -(mass[i + 1] - mass[i - 1]) / (time[i + 1] - time[i - 1])
+        m.append(diff)
+    return m """
 
 
 def get_beta(file_path):
@@ -65,10 +67,12 @@ def get_beta(file_path):
     return beta
 
 
+# normalization for better plots
 def normalize(data):
     return (data - np.min(data)) / (np.max(data) - np.min(data))
 
 
+#  Loading and procesing files using Pandas DataFrame
 def process(file_path):
     df = pd.read_csv(file_path, sep=",", encoding="cp1250", skiprows=34)
     df.rename(
@@ -80,13 +84,23 @@ def process(file_path):
         inplace=True,
     )
     df.temperature += 273.15
-    _diff(df)
+
+    # derivatives of unfiltered data series
+    df["mass_diff"] = -np.gradient(df.mass, df.time)
+    df["mass_diff2"] = abs(np.gradient(df.mass_diff, df.time))
+
+    # derivatives of filtered data series
+    df["mass_filtered"] = filter(df.time, df.mass)
+    df["mass_diff_pre"] = -np.gradient(df.mass_filtered, df.time)
+    df["mass_diff_filtered"] = filter(df.time, df.mass_diff_pre)
+    df["mass_diff2_pre"] = np.gradient(df.mass_diff_filtered, df.time)
+    df["mass_diff2_filtered"] = abs(filter(df.time, df.mass_diff2_pre))
     return df
 
 
 def get_mins(df: DataFrame):
     loc_mins = argrelextrema(
-        abs(df.mass_diff2_filtered.to_numpy()), np.less_equal, order=MINORDER
+        df.mass_diff2_filtered.to_numpy(), np.less_equal, order=MINORDER
     )
     Mpoints = []
     Tpoints = []
@@ -106,16 +120,16 @@ def plot(df: DataFrame, beta: int, points: tuple):
     fig.suptitle(f"{beta} K", fontsize=16)
 
     ax[0].title.set_text("TG")
-    ax[0].plot(df.temperature, df.mass, "ro", alpha=0.3)
+    ax[0].plot(df.temperature, df.mass, "r", alpha=0.3)
     ax[0].plot(df.temperature, df.mass_filtered, "-")
 
     ax[1].title.set_text("DTG")
-    ax[1].plot(df.temperature, df.mass_diff, "ro", alpha=0.3)
+    ax[1].plot(df.temperature, df.mass_diff, "r", alpha=0.3)
     ax[1].plot(df.temperature, df.mass_diff_filtered, "-")
 
     ax[2].title.set_text("DDTG")
-    ax[2].plot(df.temperature, abs(df.mass_diff2), "ro", alpha=0.3)
-    ax[2].plot(df.temperature, abs(df.mass_diff2_filtered), "-")
+    ax[2].plot(df.temperature, df.mass_diff2, "r", alpha=0.3)
+    ax[2].plot(df.temperature, df.mass_diff2_filtered, "-")
 
     ax[2].set_xlabel("Temperature (K)")
     ax[0].set_ylabel("Mass (%)")
@@ -151,10 +165,9 @@ def main():
 
         print(f"--- points for: {beta} K step ---")
 
-        #  Output of all found points
+        #  Output of all found Tpoints
         b = [tup[0] for tup in points]
-        print(b)
-        print(points)
+        print(*b, sep="\n")
     plt.show()
 
 
