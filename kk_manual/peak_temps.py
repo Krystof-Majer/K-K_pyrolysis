@@ -24,10 +24,9 @@ MIN_INTERVAL = (
 # 10 K  cutoff = 0.25 window = 87
 # 05 K  cutoff = 0.2 window = 191
 
-CUTOFF = 3.6
-WINSIZE = 33
+CUTOFF = 0.2
+WINSIZE = 191
 F_TYPE = "hamming"
-
 
 #  Hamming filter with cutoff of half of Nqyist frequency
 def filter(x, y):
@@ -130,11 +129,11 @@ def plot(df: DataFrame, beta: int, points: tuple):
     ax[1].set_ylabel("MSL (0-1))")
     ax[2].set_ylabel("MSL deviation (0-1)")
 
-    # Plot of local minima points/lines
+    # Plot of local minima points/lines #
     x, y = np.array(points).T
     ax[2].plot(x, y, "kx")
-    ax[2].vlines(x, 0, 1, "k", alpha=0.7)
-    ax[1].vlines(x, 0, 1, "k", alpha=0.7)
+    ax[1].vlines(x, 0, max(df.mass_diff_unfiltered), "k", alpha=0.7)
+    ax[2].vlines(x, 0, max(df.mass_diff2_unfiltered), "k", alpha=0.7)
 
     plt.figure()
 
@@ -153,7 +152,7 @@ def main():
     # set working directory to where is this script
     chdir(dirname(__file__))
 
-    file_path = "PYRO_MDF_30_700_N2_50_Kmin_recal_02.txt"
+    file_path = "PYRO_MDF_30_900_N2_05Kmin_recal_02.txt"
     beta = get_beta(file_path)
 
     df = process(file_path)
