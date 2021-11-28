@@ -1,49 +1,41 @@
 import matplotlib.pyplot as plt
 from os import chdir
 from os.path import dirname
-from glob import glob
 import pandas as pd
 from pandas.core.frame import DataFrame
 import numpy as np
-from scipy import signal  # No idea why scipy.signal excludes argrelextrema
+from scipy import signal
 from scipy.signal import argrelextrema
 
 # Script for manualy finding peak decomposition temperatures from set of files
 # Used for tuning the process !!NOT FINAL!!
 
 # number of points to check against VULNERABLE TO DATA SIZE!!!
-MINORDER = 7
+MINORDER = 10
 # Temperature (K) interval to search for mins. Will be bound to filter response
 MIN_INTERVAL = (
     500,
     750,
 )
-CUTOFF = [2.5, 2.5, 2.5, 2.5]  # Hz
-WINSIZE = 41
+
+# settings for beta, only for Hamming window
+# 50 K  cutoff = 3.6 window = 33
+# 30 K  cutoff = 2.5 window = 41
+# 10 K  cutoff = 0.25 window = 87
+# 05 K  cutoff = 0.2 window = 191
+
+CUTOFF = 3.6
+WINSIZE = 33
 F_TYPE = "hamming"
-
-
-def get_cutoff():
-    for c, value in enumerate(CUTOFF):
-        return value
 
 
 #  Hamming filter with cutoff of half of Nqyist frequency
 def filter(x, y):
-    cutoff = get_cutoff()
+
     sample = 1 / (x[1] - x[0])
     if F_TYPE == "hamming":
-        w = signal.firwin(WINSIZE, cutoff / (0.5 * sample), window=F_TYPE)
+        w = signal.firwin(WINSIZE, CUTOFF / (0.5 * sample), window=F_TYPE)
         return signal.filtfilt(w, 1, y)
-
-
-# unused
-""" def _diff(time, mass):
-    m = []
-    for i in range(1, len(mass) - 1):
-        diff = -(mass[i + 1] - mass[i - 1]) / (time[i + 1] - time[i - 1])
-        m.append(diff)
-    return m """
 
 
 def get_beta(file_path):
@@ -84,17 +76,20 @@ def process(file_path):
         inplace=True,
     )
     df.temperature += 273.15
+    df.mass /= 100
 
-    # derivatives of unfiltered data series
-    df["mass_diff"] = -np.gradient(df.mass, df.time)
-    df["mass_diff2"] = abs(np.gradient(df.mass_diff, df.time))
+    # Derivatves of mass data series
 
-    # derivatives of filtered data series
+    # 1. subplot
     df["mass_filtered"] = filter(df.time, df.mass)
-    df["mass_diff_pre"] = -np.gradient(df.mass_filtered, df.time)
-    df["mass_diff_filtered"] = filter(df.time, df.mass_diff_pre)
-    df["mass_diff2_pre"] = np.gradient(df.mass_diff_filtered, df.time)
-    df["mass_diff2_filtered"] = abs(filter(df.time, df.mass_diff2_pre))
+    # 2. subplot
+    df["mass_diff_unfiltered"] = -np.gradient(df.mass_filtered, df.time)
+    df["mass_diff_filtered"] = filter(df.time, df.mass_diff_unfiltered)
+    # 3. subplot
+    df["mass_diff2_unfiltered"] = abs(
+        np.gradient(df.mass_diff_filtered, df.time)
+    )
+    df["mass_diff2_filtered"] = abs(filter(df.time, df.mass_diff2_unfiltered))
     return df
 
 
@@ -120,27 +115,29 @@ def plot(df: DataFrame, beta: int, points: tuple):
     fig.suptitle(f"{beta} K", fontsize=16)
 
     ax[0].title.set_text("TG")
-    ax[0].plot(df.temperature, df.mass, "r", alpha=0.3)
     ax[0].plot(df.temperature, df.mass_filtered, "-")
 
     ax[1].title.set_text("DTG")
-    ax[1].plot(df.temperature, df.mass_diff, "r", alpha=0.3)
+    ax[1].plot(df.temperature, df.mass_diff_unfiltered, "r", alpha=0.3)
     ax[1].plot(df.temperature, df.mass_diff_filtered, "-")
 
     ax[2].title.set_text("DDTG")
-    ax[2].plot(df.temperature, df.mass_diff2, "r", alpha=0.3)
+    ax[2].plot(df.temperature, df.mass_diff2_unfiltered, "r", alpha=0.3)
     ax[2].plot(df.temperature, df.mass_diff2_filtered, "-")
 
     ax[2].set_xlabel("Temperature (K)")
-    ax[0].set_ylabel("Mass (%)")
-    ax[1].set_ylabel("MSL (%)")
-    ax[2].set_ylabel("MSL deviation (%)")
+    ax[0].set_ylabel("Mass (0-1))")
+    ax[1].set_ylabel("MSL (0-1))")
+    ax[2].set_ylabel("MSL deviation (0-1)")
 
-    # Plot of local minima points
+    # Plot of local minima points/lines
     x, y = np.array(points).T
     ax[2].plot(x, y, "kx")
+    ax[2].vlines(x, 0, 1, "k", alpha=0.7)
+    ax[1].vlines(x, 0, 1, "k", alpha=0.7)
 
     plt.figure()
+
     plt.title(f"normalized {beta} K")
 
     plt.plot(
@@ -156,18 +153,18 @@ def main():
     # set working directory to where is this script
     chdir(dirname(__file__))
 
-    for file_path in glob("*.txt"):
-        beta = get_beta(file_path)
+    file_path = "PYRO_MDF_30_700_N2_50_Kmin_recal_02.txt"
+    beta = get_beta(file_path)
 
-        df = process(file_path)
-        points = get_mins(df)
-        plot(df, beta, points)
+    df = process(file_path)
+    points = get_mins(df)
+    plot(df, beta, points)
 
-        print(f"--- points for: {beta} K step ---")
+    print(f"--- points for: {beta} K step ---")
 
-        #  Output of all found Tpoints
-        b = [tup[0] for tup in points]
-        print(*b, sep="\n")
+    #  Output of all found Tpoints
+    b = [tup[0] for tup in points]
+    print(*b, sep="\n")
     plt.show()
 
 
