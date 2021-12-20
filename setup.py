@@ -23,7 +23,6 @@ setup(
             "autoflake",
             "black",
             "isort",
-            "mypy",
             "tox",
             "flake8",
             "coverage",
