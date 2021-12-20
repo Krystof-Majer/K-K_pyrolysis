@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-from filter import Filters
+
+from PyroPara.filter import Filters
 
 # TODO: make sure the approach is not dead end. Write tests
 
@@ -34,7 +35,8 @@ class STAfile:
         return self._df
 
     def add_filter(self, filter_to_add):
-        """adds Filters class instance to dict paired with is name attribute as key"""
+        """adds Filters class instance to dict paired with is name attribute as
+        key"""
         if isinstance(filter_to_add, Filters):
             STAfile.list_of_filters.update(filter_to_add.name, filter_to_add)
 
@@ -44,7 +46,8 @@ class STAfile:
 
         args:
         filter_to_use: key string
-            indicates which filter to use forom list filters added to STAfile instance
+            indicates which filter to use forom list filters added to STAfile
+            instance
 
         """
         filter_in_use = STAfile.dict_of_filters[filter_to_use]
