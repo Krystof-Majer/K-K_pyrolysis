@@ -1,8 +1,14 @@
+from os.path import join
+
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QAction, QKeySequence
+from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import QMainWindow  # type: ignore
 
-from PyroPara import __version__
+from PyroPara import BASE_DIR, __version__
+
+
+def get_icon(name):
+    return QIcon(join(BASE_DIR, f"gui/icons/{name}.png"))
 
 
 class MainWindow(QMainWindow):
@@ -25,7 +31,7 @@ class MainWindow(QMainWindow):
     def create_file_menu(self) -> None:
         file_menu = self.menu_bar.addMenu("&File")
 
-        self.open_menu_action = QAction("Open...", self)
+        self.open_menu_action = QAction(get_icon("open"), "Open...", self)
         self.open_menu_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
 
         file_menu.addAction(self.open_menu_action)
