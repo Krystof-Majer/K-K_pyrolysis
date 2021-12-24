@@ -1,17 +1,39 @@
 import numpy as np
 import pandas as pd
+from PyroPara.filter import Filter
 
-from PyroPara.filter import Filters
-
-# TODO: make sure the approach is not dead end. Write tests
+# TODO: make proper properties with setter getter methods + tests
 
 
 class STAfile:
-    list_of_files = []
-    dict_of_filters = {}
-
     def __init__(self) -> None:
         self._df = None
+        self._beta = None
+
+    @property
+    def rows(self):
+        return self._df.shape[0]
+
+    @property
+    def beta(self, path: str):
+        """reads beta value from specific place in file"""
+        with open(path) as file:
+            for i, line in enumerate(file):
+                if i == 32:
+                    try:
+                        self.beta = int(
+                            f"{line[35]}{line[36]}"
+                        )  # Hardcoded position from TGA files
+                    except ValueError:
+                        try:
+                            self.beta = int(f"{line[35]}")
+                        except ValueError:
+                            self.beta = int(
+                                input(
+                                    "Unable to read temperature step from file:\n{file}\n please insert manualy "
+                                )
+                            )
+        return self._beta
 
     def load_data(self, path: str):
         """Load a STAfile data as pandas dataframe.
@@ -31,36 +53,19 @@ class STAfile:
         self._df.temperature += 273.15
         self._df.mass /= 100
 
-        STAfile.list_of_files.append(path)
-        return self._df
+    def process(self, Filter):
+        """Calculates and filters first and second derivatives of df.mass array
 
-    def add_filter(self, filter_to_add):
-        """adds Filters class instance to dict paired with is name attribute as
-        key"""
-        if isinstance(filter_to_add, Filters):
-            STAfile.list_of_filters.update(filter_to_add.name, filter_to_add)
-
-    def process(self, filter_to_use: str):
+        Args:
+            Filter (Class): instance of Filter class
         """
-        Differentiation of mass data series
-
-        args:
-        filter_to_use: key string
-            indicates which filter to use forom list filters added to STAfile
-            instance
-
-        """
-        filter_in_use = STAfile.dict_of_filters[filter_to_use]
-
         # 1. TG
-        self._df["mass_filtered"] = filter_in_use.filt(
-            self._df.time, self._df.mass
-        )
+        self._df["mass_filtered"] = Filter.apply(self._df.time, self._df.mass)
         # 2. DTG
         self._df["mass_diff_unfiltered"] = -np.gradient(
             self._df.mass_filtered, self._df.time
         )
-        self._df["mass_diff_filtered"] = filter_in_use.filt(
+        self._df["mass_diff_filtered"] = Filter.apply(
             self._df.time, self._df.mass_diff_unfiltered
         )
         # 3. DDTG
@@ -68,5 +73,5 @@ class STAfile:
             np.gradient(self._df.mass_diff_filtered, self._df.time)
         )
         self._df["mass_diff2_filtered"] = abs(
-            filter_in_use.filt(self._df.time, self._df.mass_diff2_unfiltered)
+            Filter.apply(self._df.time, self._df.mass_diff2_unfiltered)
         )
