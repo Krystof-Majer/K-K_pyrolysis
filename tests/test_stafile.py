@@ -22,9 +22,8 @@ def test_is_symmetrical(sta_file):
     assert len(sta_file._df.temperature) == len(sta_file._df.mass)
 
 
-def test_valid_beta(sta_file):  # TODO: test beta property
-    assert sta_file._beta > 0
-    pass
+# def test_valid_beta(sta_file):  # TODO: test beta property
+#    assert sta_file._beta > 0
 
 
 def test_rows(sta_file):

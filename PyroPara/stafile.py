@@ -8,13 +8,11 @@ from PyroPara.filter import Filter
 class STAfile:
     def __init__(self) -> None:
         self._df = None
-        self._beta = None
 
     @property
     def rows(self):
-        return self._df.shape[0]
+        return len(self._df.shape[0])
 
-    @property
     def beta(self, path: str):
         """reads beta value from specific place in file"""
         with open(path) as file:
@@ -33,7 +31,7 @@ class STAfile:
                                     "Unable to read temperature step from file:\n{file}\n please insert manualy "
                                 )
                             )
-        return self._beta
+        return self.beta
 
     def load_data(self, path: str):
         """Load a STAfile data as pandas dataframe.
@@ -53,19 +51,19 @@ class STAfile:
         self._df.temperature += 273.15
         self._df.mass /= 100
 
-    def process(self, Filter):
+    def process(self, filter):
         """Calculates and filters first and second derivatives of df.mass array
 
         Args:
             Filter (Class): instance of Filter class
         """
         # 1. TG
-        self._df["mass_filtered"] = Filter.apply(self._df.time, self._df.mass)
+        self._df["mass_filtered"] = filter.apply(self._df.time, self._df.mass)
         # 2. DTG
         self._df["mass_diff_unfiltered"] = -np.gradient(
             self._df.mass_filtered, self._df.time
         )
-        self._df["mass_diff_filtered"] = Filter.apply(
+        self._df["mass_diff_filtered"] = filter.apply(
             self._df.time, self._df.mass_diff_unfiltered
         )
         # 3. DDTG
@@ -73,5 +71,5 @@ class STAfile:
             np.gradient(self._df.mass_diff_filtered, self._df.time)
         )
         self._df["mass_diff2_filtered"] = abs(
-            Filter.apply(self._df.time, self._df.mass_diff2_unfiltered)
+            filter.apply(self._df.time, self._df.mass_diff2_unfiltered)
         )
