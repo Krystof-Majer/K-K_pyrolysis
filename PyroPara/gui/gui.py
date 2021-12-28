@@ -24,4 +24,5 @@ class Gui:
         if not dir:
             return
 
-        print(dir)
+        self.main_window.sta_files_widget.clear()
+        self.main_window.sta_files_widget.addItem(dir)
