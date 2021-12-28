@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
         self.resize(1024, 768)
 
         self.menu_bar = self.menuBar()
-        self.open_menu_action: QAction
+        self.read_menu_action: QAction
 
         self.setup_ui()
 
@@ -31,7 +31,9 @@ class MainWindow(QMainWindow):
     def create_file_menu(self) -> None:
         file_menu = self.menu_bar.addMenu("&File")
 
-        self.open_menu_action = QAction(get_icon("open"), "Open...", self)
-        self.open_menu_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
+        self.read_menu_action = QAction(
+            get_icon("open"), "Read STA files...", self
+        )
+        self.read_menu_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_R))
 
-        file_menu.addAction(self.open_menu_action)
+        file_menu.addAction(self.read_menu_action)
