@@ -3,6 +3,7 @@ from os.path import join
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import QMainWindow  # type: ignore
+from PySide6.QtWidgets import QListWidget, QSplitter, QWidget
 
 from PyroPara import BASE_DIR, __version__
 
@@ -17,12 +18,25 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"PyroPara {__version__}")
         self.resize(1024, 768)
 
+        self.main_widget: QSplitter
+
+        self.sta_files_widget = QListWidget()
         self.menu_bar = self.menuBar()
         self.read_menu_action: QAction
 
         self.setup_ui()
 
     def setup_ui(self) -> None:
+        self.main_widget = QSplitter(Qt.Horizontal)
+        self.main_widget.setChildrenCollapsible(False)
+        self.setCentralWidget(self.main_widget)
+
+        self.main_widget.addWidget(self.sta_files_widget)
+        self.main_widget.addWidget(QWidget())
+
+        self.main_widget.setStretchFactor(0, 1)
+        self.main_widget.setStretchFactor(1, 3)
+
         self.create_menus()
 
     def create_menus(self) -> None:
