@@ -1,12 +1,12 @@
 from PySide6.QtWidgets import QApplication
 
-from PyroPara.gui.windows import MainWindow
+from PyroPara.gui.gui import Gui
 
 
 def show():
     app = QApplication()
 
-    window = MainWindow()
-    window.show()
+    gui = Gui()
+    gui.show()
 
     app.exec_()
