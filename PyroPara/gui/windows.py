@@ -3,9 +3,10 @@ from os.path import join
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import QMainWindow  # type: ignore
-from PySide6.QtWidgets import QListWidget, QSplitter, QWidget
+from PySide6.QtWidgets import QListWidget, QSplitter
 
 from PyroPara import BASE_DIR, __version__
+from PyroPara.gui.base import PlotWidget
 
 
 def get_icon(name):
@@ -31,8 +32,12 @@ class MainWindow(QMainWindow):
         self.main_widget.setChildrenCollapsible(False)
         self.setCentralWidget(self.main_widget)
 
+        self.plot_widget = PlotWidget()
+        self.plot_widget.grid(visible=True)
+        self.plot_widget.plot((0, 0.5, 1, 0), (0, 0.5, 0, 0), "r-")
+
         self.main_widget.addWidget(self.sta_files_widget)
-        self.main_widget.addWidget(QWidget())
+        self.main_widget.addWidget(self.plot_widget)
 
         self.main_widget.setStretchFactor(0, 1)
         self.main_widget.setStretchFactor(1, 3)
