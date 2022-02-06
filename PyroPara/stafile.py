@@ -9,10 +9,6 @@ class STAfile:
     def __init__(self) -> None:
         self._df = None
 
-    @property
-    def rows(self):
-        return len(self._df.shape[0])
-
     def beta(self, path: str):
         """reads beta value from specific place in file"""
         with open(path) as file:

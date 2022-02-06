@@ -17,13 +17,8 @@ DEFAULT_FILTER_PARAMS = {
 
 class analysis:
     def __init__(self) -> None:
-        self.stafile = []  # (file,filter)
-
-    # TODO: use STAfile and filter classes
-    # if filter not specified create one with default settings from dict
-    # plot data
-    # find local minima in DDTG -> paint in plot
-    # optional: create csv with local minima coordinates ->test with fixture
+        self.stafile_list = []  # (file,filter)
+        self.filter_list = []
 
     def get_data(self, path: str):
         # glob.glob() return a list of file name with specified pathname
