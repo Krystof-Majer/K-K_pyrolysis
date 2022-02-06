@@ -1,9 +1,7 @@
-from PyroPara.stafile import STAfile
-from PyroPara.filter import Filter
-from scipy.signal import argrelextrema
-import matplotlib.pyplot as plt
-from os import listdir
 import glob
+
+from PyroPara.filter import Filter
+from PyroPara.stafile import STAfile
 
 # dictionary of default filter parameters to be used if not specified by user
 # {beta:(cutoff,window_size)}

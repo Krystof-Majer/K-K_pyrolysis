@@ -1,9 +1,7 @@
 import pandas as pd
-import numpy as np
 from scipy import signal
 
-
-""" 
+"""
 Class for defining filters to by used on STAfila class during process method
 
 args

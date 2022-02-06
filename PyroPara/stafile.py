@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-from PyroPara.filter import Filter
 
 # TODO: make proper properties with setter getter methods + tests
 
@@ -28,7 +27,8 @@ class STAfile:
                         except ValueError:
                             self.beta = int(
                                 input(
-                                    "Unable to read temperature step from file:\n{file}\n please insert manualy "
+                                    "Unable to read temperature step from"
+                                    "file:\n{file}\n please insert manualy "
                                 )
                             )
         return self.beta
