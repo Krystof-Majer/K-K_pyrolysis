@@ -13,7 +13,7 @@ class Gui:
     def show(self) -> None:
         self.main_window.showMaximized()
 
-    def connect_signals(self):
+    def connect_signals(self) -> None:
         window = self.main_window
 
         window.read_menu_action.triggered.connect(self.open_clicked)

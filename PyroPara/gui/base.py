@@ -48,14 +48,14 @@ class PlotWidget(QWidget):
         self.axis.format_coord = self.format_coord
 
     @property
-    def xlim(self) -> None:
+    def xlim(self) -> float:
         return self.axis.get_xlim()
 
     def set_xlim(self, xlim: float) -> None:
         self.axis.set_xlim(xlim)
 
     @property
-    def ylim(self) -> None:
+    def ylim(self) -> float:
         return self.axis.get_ylim()
 
     def set_ylim(self, ylim: float) -> None:
