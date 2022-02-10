@@ -1,9 +1,8 @@
-from PyroPara.stafile import STAfile
-from PyroPara.filter import Filter
-from scipy.signal import argrelextrema
-import matplotlib.pyplot as plt
-from collections import namedtuple
 import glob
+from collections import namedtuple
+
+from PyroPara.filter import Filter
+from PyroPara.stafile import STAfile
 
 # dictionary of default filter parameters to be used if not specified by user
 # {beta:(cutoff,window_size)}
@@ -23,7 +22,7 @@ DEFAULT_FILTER_PARAMS = {
 }
 
 
-def get_beta(path):  # Placeholder method
+def get_beta(path):
     """reads beta value from specific place in file"""
     with open(path) as file:
         for i, line in enumerate(file):
@@ -36,26 +35,26 @@ def get_beta(path):  # Placeholder method
                     try:
                         beta = float(f"{line[35]}")
                     except ValueError:
-                        beta = float(
-                            input(
-                                "Unable to read temperature step from file:\n{file}\n please insert manualy "
-                            )
+                        raise ValueError(
+                            "Unable to read temperature step from "
+                            f"file: {file}"
                         )
     return beta
 
 
 class Analysis:
     def __init__(self) -> None:
-        self.stafiles = []
+        self.sta_files = []
 
-    def get_files(self, path: str):
+    def load_files(self, directory: str):
         # glob.glob() return a list of file name with specified pathname
-        files = glob.glob(f"{path}/PYRO**.txt")
-        for path_ in files:
-            self.stafiles.append(path_)
+        files = glob.glob(f"{directory}/PYRO**.txt")
+
+        for path in files:
+            self.sta_files.append(path)
 
             # Retrieves heating rate (beta)
-            beta = get_beta(path_)
+            beta = get_beta(path)
 
             # Looks up default filter parameters
             params = DEFAULT_FILTER_PARAMS.get(beta)
@@ -70,16 +69,15 @@ class Analysis:
                 raise Exception("Default filter failed to load")
 
             # STAfile class initialization and loading
-            path_ = STAfile(path_, default_filter)  # Possible?
-            path_.load()
+            path = STAfile(path, default_filter)  # Possible?
+            path.load()
             # TODO: make it passable to run method
 
     def run(self):
         # use process method from STAfile
-        for stafile in self.stafiles:
+        for stafile in self.sta_files:
             stafile.process()
         # make data useable to find local minima
-        pass
 
     def local_minima(self):  # missing settings as arguments, maybe use default
         # find local minima using argrelextrema

@@ -1,11 +1,15 @@
 import pytest
+
+from PyroPara.filter import FILTERS
 from PyroPara.stafile import STAfile
 
 
 @pytest.fixture
 def sta_file():
-    file = STAfile()
-    file.load_data("tests/fixtures/data.txt")
+    file = STAfile(
+        "tests/fixtures/PYRO_MDF_30_700_N2_50_Kmin_recal_02.txt", FILTERS[50]
+    )
+    file.load()
 
     return file
 

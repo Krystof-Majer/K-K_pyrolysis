@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+
 from PyroPara.filter import Filter
 
 # TODO: make proper properties with setter getter methods + tests
