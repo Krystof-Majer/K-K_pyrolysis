@@ -35,5 +35,8 @@ class Filter:
 # 05 K  cutoff = 0.2 window = 191
 
 FILTERS = {
+    5.0: Filter(type="hanning", cutoff=0.2, winsize=191),
+    10.0: Filter(type="hanning", cutoff=0.25, winsize=87),
+    30.0: Filter(type="hanning", cutoff=2.5, winsize=41),
     50.0: Filter(type="hanning", cutoff=3.6, winsize=33),
 }

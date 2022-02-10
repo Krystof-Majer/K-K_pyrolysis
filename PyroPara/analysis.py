@@ -1,4 +1,5 @@
 import glob
+import re
 from collections import namedtuple
 
 from PyroPara.filter import Filter
@@ -21,25 +22,20 @@ DEFAULT_FILTER_PARAMS = {
     50.0: beta50,
 }
 
+BETA_REGEX = re.compile(r"/(.+)\(K/min\)")
 
-def get_beta(path):
+
+def get_beta(path) -> float:
     """reads beta value from specific place in file"""
     with open(path) as file:
-        for i, line in enumerate(file):
-            if i == 32:
-                try:
-                    beta = float(
-                        f"{line[35]}{line[36]}"
-                    )  # Hardcoded position from TGA files
-                except ValueError:
-                    try:
-                        beta = float(f"{line[35]}")
-                    except ValueError:
-                        raise ValueError(
-                            "Unable to read temperature step from "
-                            f"file: {file}"
-                        )
-    return beta
+        for line in file:
+            if "#RANGE:" in line:
+                m = re.search(BETA_REGEX, line)
+
+                if m:
+                    return float(m.group(1))
+
+    raise ValueError("Unable to read temperature step from " f"file: {file}")
 
 
 class Analysis:
