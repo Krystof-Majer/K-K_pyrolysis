@@ -1,15 +1,22 @@
-import numpy as np
 import pandas as pd
+import numpy as np
 from PyroPara.filter import Filter
-
-# TODO: make proper properties with setter getter methods + tests
 
 
 class STAfile:
-    def __init__(self, path: str, filter: Filter) -> None:
+    def __init__(
+        self,
+        *,
+        path: str,
+        beta: float = None,
+        filter: Filter = None,
+        local_minima: list = None
+    ) -> None:
         self._df = None
         self.filter = filter
         self.path = path
+        self.beta = beta
+        self.local_minima = local_minima
 
     def load(self):
         """Load a STAfile data as pandas dataframe.
@@ -33,7 +40,6 @@ class STAfile:
 
     def process(self):
         """Calculates and filters first and second derivatives of df.mass array
-
         Args:
             Filter (Class): instance of Filter class
         """
