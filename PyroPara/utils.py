@@ -5,7 +5,7 @@ BETA_REGEX = re.compile(r"/(.+)\(K/min\)")
 
 def get_beta(path) -> float:
     """reads beta value from specific place in file"""
-    with open(path) as file:
+    with open(path, "r", encoding="cp1250") as file:
         for line in file:
             if "#RANGE:" in line:
                 m = re.search(BETA_REGEX, line)
