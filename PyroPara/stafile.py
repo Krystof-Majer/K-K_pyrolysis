@@ -7,10 +7,13 @@ from PyroPara.filter import Filter
 
 
 class STAfile:
-    def __init__(self, path: str, filter: Filter) -> None:
+    def __init__(
+        self, *, path: str = None, beta: float = None, filter: Filter = None
+    ) -> None:
         self._df = None
-        self.filter = filter
         self.path = path
+        self.beta = beta
+        self.filter = filter
 
     def load(self):
         """Load a STAfile data as pandas dataframe.

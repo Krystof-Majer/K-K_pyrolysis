@@ -1,73 +1,39 @@
 import glob
-import re
-from collections import namedtuple
+from typing import List
 
-from PyroPara.filter import Filter
+from PyroPara.filter import FILTERS
 from PyroPara.stafile import STAfile
-
-# dictionary of default filter parameters to be used if not specified by user
-# {beta:(cutoff,window_size)}
-
-Params = namedtuple("Params", ["cutoff", "winsize", "filtertype"])
-beta5 = Params(0.2, 191, "hanning")
-beta10 = Params(0.25, 87, "hanning")
-beta30 = Params(2.5, 41, "hanning")
-beta50 = Params(3.6, 33, "hanning")
-
-
-DEFAULT_FILTER_PARAMS = {
-    5.0: beta5,
-    10.0: beta10,
-    30.0: beta30,
-    50.0: beta50,
-}
-
-BETA_REGEX = re.compile(r"/(.+)\(K/min\)")
-
-
-def get_beta(path) -> float:
-    """reads beta value from specific place in file"""
-    with open(path) as file:
-        for line in file:
-            if "#RANGE:" in line:
-                m = re.search(BETA_REGEX, line)
-
-                if m:
-                    return float(m.group(1))
-
-    raise ValueError("Unable to read temperature step from " f"file: {file}")
+from PyroPara.utils import get_beta
 
 
 class Analysis:
     def __init__(self) -> None:
-        self.sta_files = []
+        self.sta_files: List[STAfile] = []
+
+    def __len__(self) -> int:
+        return len(self.sta_files)
 
     def load_files(self, directory: str):
+        self.sta_files.clear()
+
         # glob.glob() return a list of file name with specified pathname
         files = glob.glob(f"{directory}/PYRO**.txt")
 
         for path in files:
-            self.sta_files.append(path)
-
             # Retrieves heating rate (beta)
             beta = get_beta(path)
 
-            # Looks up default filter parameters
-            params = DEFAULT_FILTER_PARAMS.get(beta)
-            winsize = params.winsize
-            cutoff = params.cutoff
-            filter_type = params.type
-
             # Default filter initialization
-            if params is not None:
-                default_filter = Filter(filter_type, cutoff, winsize)
-            else:
+            default_filter = FILTERS.get(beta)
+
+            if default_filter is None:
                 raise Exception("Default filter failed to load")
 
             # STAfile class initialization and loading
-            path = STAfile(path, default_filter)  # Possible?
-            path.load()
-            # TODO: make it passable to run method
+            file = STAfile(path=path, beta=beta, filter=default_filter)
+            file.load()
+
+            self.sta_files.append(file)
 
     def run(self):
         # use process method from STAfile
