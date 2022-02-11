@@ -1,11 +1,13 @@
 import glob
-import numpy as np
-from PyroPara.stafile import STAfile
-from PyroPara.filter import FILTERS
-from PyroPara.utils import get_beta
-from scipy.signal import argrelextrema
-import matplotlib.pyplot as plt
 from typing import List
+
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.signal import argrelextrema
+
+from PyroPara.filter import FILTERS
+from PyroPara.stafile import STAfile
+from PyroPara.utils import get_beta
 
 """
 Params = namedtuple("Params", ["cutoff", "winsize", "filtertype"])

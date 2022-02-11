@@ -1,9 +1,8 @@
-from click import get_binary_stream
 import pytest
 
-from PyroPara.stafile import STAfile
 from PyroPara.analysis import get_beta
 from PyroPara.filter import FILTERS
+from PyroPara.stafile import STAfile
 
 PATH = "tests/fixtures/PYRO_MDF_30_900_N2_30Kmin_recal_02.txt"
 
