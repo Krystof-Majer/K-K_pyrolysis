@@ -1,5 +1,6 @@
-import pytest
 import pandas as pd
+import pytest
+
 from PyroPara.analysis import get_beta
 from PyroPara.filter import FILTERS
 from PyroPara.stafile import STAfile
@@ -49,7 +50,9 @@ def test_valid_beta(sta_file):
 def test_process(sta_file: STAfile, sta_file_processed):
     sta_file.process()
     assert sta_file._df is not None
-    pd.testing.assert_frame_equal(sta_file._df, sta_file_processed)
+    pd.testing.assert_frame_equal(
+        sta_file._df, sta_file_processed, check_less_precise=True
+    )
 
 
 def test_local_minima():
