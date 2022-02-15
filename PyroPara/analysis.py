@@ -1,76 +1,53 @@
 import glob
+from typing import List
 
-from PyroPara.filter import Filter
+from PyroPara.filter import FILTERS
 from PyroPara.stafile import STAfile
-
-# dictionary of default filter parameters to be used if not specified by user
-# {beta:(cutoff,window_size)}
-DEFAULT_FILTER_PARAMS = {
-    "5": (0.2, 191),
-    "10": (0.25, 87),
-    "30": (2.5, 41),
-    "50": (3.6, 33),
-}
+from PyroPara.utils import get_beta
 
 
-class analysis:
+class Analysis:
     def __init__(self) -> None:
-        self.stafile = []  # (file,filter)
+        self.sta_files: List[STAfile] = []
 
-    # TODO: use STAfile and filter classes
-    # if filter not specified create one with default settings from dict
-    # plot data
-    # find local minima in DDTG -> paint in plot
-    # optional: create csv with local minima coordinates ->test with fixture
+    def __len__(self) -> int:
+        return len(self.sta_files)
 
-    def get_data(self, path: str):
+    def load_files(self, directory: str):
+        self.sta_files.clear()
+
         # glob.glob() return a list of file name with specified pathname
-        file_list = glob.glob(f"{path}/PYRO**.txt")
-        for f in file_list:
-            # STAfile.load_data(f)
-            # STAfile.beta(f)
-            self.stafile.append([f])  # Appends to list as another list
-        return self.stafile
+        files = glob.glob(f"{directory}/PYRO**.txt")
 
-    def assign_filter(self, index: int, filter):
-        """assign filter object to stafile object in list
+        for path in files:
+            # Retrieves heating rate (beta)
+            beta = get_beta(path)
 
-        Args:
-            index (int): position of stafile object in list
-            filter (Class | list): filter objects to by assigned
+            # Default filter initialization
+            default_filter = FILTERS.get(beta)
 
-        Raises:
-            TypeError: filter object is not of correct type
-        """
-        if isinstance(filter, Filter):
-            if len(self.stafile[index]) == 1:
-                self.stafile[index].append(filter)
-            else:
-                self.stafile[index][1] = self.stafile[index][filter]
-        elif isinstance(filter, list):
-            for entry in filter:
-                i = index
-                if not isinstance(filter, Filter):
-                    raise TypeError("incorect filter...")
-                if len(self.stafile[i]) == 1:
-                    if not isinstance(filter, Filter):
-                        raise TypeError("incorect filter...")
-                    self.stafile[i].append(filter[entry])
-                    i += 1
-                else:
-                    self.stafile[i][1] = self.stafile[i][entry]
+            if default_filter is None:
+                raise Exception("Default filter failed to load")
+
+            # STAfile class initialization and loading
+            file = STAfile(path=path, beta=beta, filter=default_filter)
+            file.load()
+
+            self.sta_files.append(file)
 
     def run(self):
+        # use process method from STAfile
+        for stafile in self.sta_files:
+            stafile.process()
+        # make data useable to find local minima
 
-        # TODO: check internal logic and data handeling
-
-        for pair in self.stafile:
-            if len(pair) == 1:
-                beta = DEFAULT_FILTER_PARAMS.get(str(STAfile.beta(pair)))
-                self.stafile[pair][1].append(
-                    Filter(DEFAULT_FILTER_PARAMS(beta))
-                )
-            self.df = STAfile.load_data(pair[0])
+    def local_minima(self):  # missing settings as arguments, maybe use default
+        # find local minima using argrelextrema
+        # save the found points somewhere
+        # enable changing point finding settings from argrelestrema
+        pass
 
     def plot():
+        # simple placeholder to plot using matplotlib together with points
+        # separate graphs, later add show toggle
         pass
