@@ -17,7 +17,3 @@ def test_load_files(analysis):
 
 def test_run(analysis):
     pass
-
-
-def test_local_minima(analysis):
-    pass
