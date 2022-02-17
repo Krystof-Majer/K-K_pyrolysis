@@ -1,7 +1,8 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from scipy.signal import argrelextrema
+
 from PyroPara.filter import Filter
 
 

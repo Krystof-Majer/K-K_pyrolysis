@@ -27,6 +27,11 @@ def sta_file_processed():
 
 
 @pytest.fixture
+def local_minima():
+    pass
+
+
+@pytest.fixture
 def sta_file_local_minima():
     pass
 
@@ -49,10 +54,7 @@ def test_valid_beta(sta_file):
 
 def test_process(sta_file: STAfile, sta_file_processed):
     sta_file.process()
-    assert sta_file._df is not None
-    pd.testing.assert_frame_equal(
-        sta_file._df, sta_file_processed, check_less_precise=True
-    )
+    pd.testing.assert_frame_equal(sta_file._df, sta_file_processed, atol=1e-4)
 
 
 def test_local_minima():

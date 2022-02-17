@@ -1,5 +1,6 @@
 import glob
 from typing import List
+
 from PyroPara.filter import FILTERS
 from PyroPara.stafile import STAfile
 from PyroPara.utils import get_beta
