@@ -60,7 +60,7 @@ class STAfile:
             self.filter.apply(self._df.time, self._df.mass_diff2_unfiltered)
         )
 
-    def local_minima(
+    def get_local_minima(
         self,
         *,
         minorder: int = 7,
@@ -69,7 +69,7 @@ class STAfile:
         autofind: bool = False,
     ):
         mass_array = self._df.mass_diff2_filtered.to_numpy()
-        temperature_array = self._df.temperature.to_numpy()
+        temperature_array = self._df.temperature
         self.local_minima.clear()
         m_points = []
         t_points = []
@@ -84,7 +84,8 @@ class STAfile:
                 ):
                     m_points.append(mass_array[min_])
                     t_points.append(temperature_array[min_])
-                self.local_minima.append.zip(t_points, m_points)
+                tup = zip(t_points, m_points)
+                self.local_minima.append(tup)
         else:
             while len(self.local_minima) > 10 or len(self.local_minima) == 0:
                 temp_minima = argrelextrema(
@@ -97,7 +98,8 @@ class STAfile:
                     ):
                         m_points.append(mass_array[min_])
                         t_points.append(temperature_array[min_])
-                    self.local_minima.append.zip(t_points, m_points)
+                    tup = zip(t_points, m_points)
+                    self.local_minima.append(tup)
                 minorder += 1
 
     def plot(self):
