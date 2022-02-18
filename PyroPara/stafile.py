@@ -10,7 +10,8 @@ class STAfile:
     def __init__(
         self, *, path: str, beta: float = None, filter: Filter = None
     ) -> None:
-        self._df = None
+        self._df: pd.DataFrame = None
+        self.is_processed = False
         self.filter = filter
         self.path = path
         self.beta = beta
@@ -60,7 +61,9 @@ class STAfile:
             self.filter.apply(self._df.time, self._df.mass_diff2_unfiltered)
         )
 
-    def get_local_minima(
+        self.is_processed = True
+
+    def calculate_local_minima(
         self,
         *,
         minorder: int = 7,
@@ -68,11 +71,18 @@ class STAfile:
         max_temp: float = 750,
         autofind: bool = False,
     ):
+        # be sure data are ready
+        if not self.is_processed:
+            self.process()
+
         mass_array = self._df.mass_diff2_filtered.to_numpy()
         temperature_array = self._df.temperature
+
         self.local_minima.clear()
+
         m_points = []
         t_points = []
+
         if not autofind:
             temp_minima = argrelextrema(
                 mass_array, np.less_equal, order=minorder

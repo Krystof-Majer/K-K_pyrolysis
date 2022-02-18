@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -7,16 +8,6 @@ from PyroPara.stafile import STAfile
 
 PATH_30 = "tests/fixtures/PYRO_MDF_30_900_N2_30Kmin_recal_02.txt"
 PATH_30_PROCESSED = "tests/fixtures/processed_file_30K_MDF.txt"
-PATH_30_LOCAL_MINIMA = [
-    (511.432, 0.0056501613913371475),
-    (524.05601, 0.0063734053433378455),
-    (586.77601, 0.04479614411308593),
-    (607.7729899999999, 0.03565425247006773),
-    (656.66001, 0.035667231708348686),
-    (702.141, 0.0016860199515036961),
-    (719.47901, 0.0021417716797097874),
-    (740.3389999999999, 0.004855446439990549),
-]
 
 
 @pytest.fixture
@@ -59,11 +50,32 @@ def test_valid_beta(sta_file):
 
 
 def test_process(sta_file: STAfile, sta_file_processed):
+    assert not sta_file.is_processed
     sta_file.process()
-    pd.testing.assert_frame_equal(sta_file._df, sta_file_processed, atol=1e-2)
+    assert sta_file.is_processed
+
     assert len(sta_file._df.columns) == 12
+    pd.testing.assert_frame_equal(sta_file._df, sta_file_processed, atol=1e-2)
 
 
-# def test_get_local_minima(sta_file: STAfile):
+def test_calculate_local_minima(sta_file: STAfile):
+
+    expected_local_minima = np.array(
+        [
+            (511.432, 0.0056501613913371475),
+            (524.05601, 0.0063734053433378455),
+            (586.77601, 0.04479614411308593),
+            (607.7729899999999, 0.03565425247006773),
+            (656.66001, 0.035667231708348686),
+            (702.141, 0.0016860199515036961),
+            (719.47901, 0.0021417716797097874),
+            (740.3389999999999, 0.004855446439990549),
+        ]
+    )
+
+    assert expected_local_minima.shape == (8, 2)
+
+
+# sta_file.calculate_local_minima()
 # assert len(sta_file.local_minima) == 8
 # assert sta_file.local_minima == pytest.approx(PATH_30_LOCAL_MINIMA, 1e-2)
