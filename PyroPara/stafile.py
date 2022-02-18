@@ -14,7 +14,7 @@ class STAfile:
         self.filter = filter
         self.path = path
         self.beta = beta
-        self.local_minima = []
+        self.local_minima: np.ndarray = None
 
     def load(self):
         """Load a STAfile data as pandas dataframe.
@@ -60,7 +60,8 @@ class STAfile:
             self.filter.apply(self._df.time, self._df.mass_diff2_unfiltered)
         )
 
-    def get_local_minima(
+    # Rozdělit na několik -> get local minima
+    def find_local_minima(
         self,
         *,
         minorder: int = 7,

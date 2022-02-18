@@ -164,12 +164,6 @@ def main():
     #  Output of all found Tpoints
     print(*points, sep="\n")
     plt.show()
-    df.to_csv(
-        r"pandas_output.txt",
-        index=None,
-        sep=",",
-        mode="a",
-    )
 
 
 if __name__ == "__main__":

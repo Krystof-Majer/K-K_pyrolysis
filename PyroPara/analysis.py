@@ -40,4 +40,4 @@ class Analysis:
         # use process method from STAfile
         for file in self.sta_files:
             file.process()
-            file.local_minima()
+            file.find_local_minima()

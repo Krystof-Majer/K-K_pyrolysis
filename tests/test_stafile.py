@@ -58,12 +58,14 @@ def test_valid_beta(sta_file):
     assert sta_file.beta == 30.0
 
 
+# Pryč
 def test_process(sta_file: STAfile, sta_file_processed):
     sta_file.process()
-    pd.testing.assert_frame_equal(sta_file._df, sta_file_processed, atol=1e-2)
+    pd.testing.assert_frame_equal(sta_file._df, sta_file_processed, atol=1e-3)
     assert len(sta_file._df.columns) == 12
 
 
+# TODO: dodělat -> lokální minima sem
 # def test_get_local_minima(sta_file: STAfile):
 # assert len(sta_file.local_minima) == 8
 # assert sta_file.local_minima == pytest.approx(PATH_30_LOCAL_MINIMA, 1e-2)
