@@ -1,7 +1,7 @@
 import glob
 from typing import List
 
-from PyroPara.filter import FILTERS
+from PyroPara.filter import FILTERS, Filter
 from PyroPara.stafile import STAfile
 from PyroPara.utils import get_beta
 
@@ -36,8 +36,17 @@ class Analysis:
 
             self.sta_files.append(file)
 
+    def load_file(self, path, filter: Filter = None):
+        beta = get_beta(path)
+        if filter is None:
+            default_filter = FILTERS.get(beta)
+        file = STAfile(path=path, beta=beta, filter=default_filter)
+        file.load()
+
+        self.sta_files.append(file)
+
     def run(self):
         # use process method from STAfile
         for file in self.sta_files:
             file.process()
-            file.find_local_minima()
+            file.calculate_local_minima()

@@ -10,11 +10,12 @@ class STAfile:
     def __init__(
         self, *, path: str, beta: float = None, filter: Filter = None
     ) -> None:
-        self._df = None
+        self._df: pd.DataFrame = None
+        self.is_processed = False
         self.filter = filter
         self.path = path
         self.beta = beta
-        self.local_minima: np.ndarray = None
+        self.local_minima: list = []
 
     def load(self):
         """Load a STAfile data as pandas dataframe.
@@ -60,48 +61,49 @@ class STAfile:
             self.filter.apply(self._df.time, self._df.mass_diff2_unfiltered)
         )
 
+        self.is_processed = True
+
     # Rozdělit na několik -> get local minima
-    def find_local_minima(
+    def calculate_local_minima(
         self,
         *,
         minorder: int = 7,
         min_temp: float = 500,
         max_temp: float = 750,
-        autofind: bool = False,
+    ):
+
+        if not self.is_processed:
+            self.process()
+
+        self.local_minima.clear()
+        points = []
+
+        while len(points) > 10 or len(points) == 0:
+            points = self.find_local_minima(minorder, min_temp, max_temp)
+            minorder = +1
+
+        self.local_minima.extend(points)
+
+    def find_local_minima(
+        self,
+        minorder,
+        min_temp,
+        max_temp,
     ):
         mass_array = self._df.mass_diff2_filtered.to_numpy()
         temperature_array = self._df.temperature
-        self.local_minima.clear()
-        m_points = []
-        t_points = []
-        if not autofind:
-            temp_minima = argrelextrema(
-                mass_array, np.less_equal, order=minorder
-            )
-            for min_ in temp_minima[0]:
-                if (
-                    temperature_array[min_] >= min_temp
-                    and temperature_array[min_] <= max_temp
-                ):
-                    m_points.append(mass_array[min_])
-                    t_points.append(temperature_array[min_])
-                tup = zip(t_points, m_points)
-                self.local_minima.append(tup)
-        else:
-            while len(self.local_minima) > 10 or len(self.local_minima) == 0:
-                temp_minima = argrelextrema(
-                    mass_array, np.less_equal, order=minorder
-                )
-                for min_ in temp_minima[0]:
-                    if (
-                        temperature_array[min_] >= min_temp
-                        and temperature_array[min_] <= max_temp
-                    ):
-                        m_points.append(mass_array[min_])
-                        t_points.append(temperature_array[min_])
-                    tup = zip(t_points, m_points)
-                    self.local_minima.append(tup)
-                minorder += 1
+        points = []
+
+        temp_minima = argrelextrema(mass_array, np.less_equal, order=minorder)
+        for min_ in temp_minima[0]:
+            if (
+                temperature_array[min_] >= min_temp
+                and temperature_array[min_] <= max_temp
+            ):
+                tup = (temperature_array[min_], mass_array[min_])
+                points.append(tup)
+
+        return points
 
     def plot(self):
 
