@@ -63,7 +63,6 @@ class STAfile:
 
         self.is_processed = True
 
-    # Rozdělit na několik -> get local minima
     def calculate_local_minima(
         self,
         *,
@@ -71,7 +70,19 @@ class STAfile:
         min_temp: float = 500,
         max_temp: float = 750,
     ):
+        """Calculates <= 10 local minima in DDTG curve for a given
+        stafile, appends to stafile.local_minima
 
+        Args:
+            minorder (int, optional): Number of nearby points to consider
+            for possible local minimum. Defaults to 7.
+
+            min_temp (float, optional): Lower bound of temperature interval.
+                Defaults to 500.
+
+            max_temp (float, optional): Upper bound of temperature interval.
+                Defaults to 750.
+        """
         if not self.is_processed:
             self.process()
 
@@ -86,10 +97,22 @@ class STAfile:
 
     def find_local_minima(
         self,
-        minorder,
-        min_temp,
-        max_temp,
+        minorder: int,
+        min_temp: int,
+        max_temp: int,
     ):
+        """Calculates local minima for given DDTG stafile with fixed parameters
+
+        Args:
+            minorder (int): Number of nearby points to consider
+            for possible local minimum.
+
+            min_temp (int): Lower bound of temperature interval.
+            max_temp (int): Upper bound of temperature interval.
+
+        Returns:
+            _type_: _description_
+        """
         mass_array = self._df.mass_diff2_filtered.to_numpy()
         temperature_array = self._df.temperature
         points = []

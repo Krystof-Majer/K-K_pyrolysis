@@ -3,7 +3,7 @@
 Application for analysing termogravimetric curves obtaining Arrhenic parameters
 Written in python
 
-Work done: none
+Work done: some
 
 github template source: https://github.com/tantecky/pyapp.git
 

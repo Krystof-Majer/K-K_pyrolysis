@@ -13,9 +13,17 @@ class Analysis:
     def __len__(self) -> int:
         return len(self.sta_files)
 
-    def load_files(self, directory: str):
+    def load_all_files(self, directory: str):
+        """Loads all files from given directory.
+        Assigns default filters
 
-        # glob.glob() return a list of file name with specified pathname
+        Args:
+            directory (str): Directory path
+
+        Raises:
+            Exception: Default filter failed to load
+        """
+
         self.sta_files.clear()
 
         files = glob.glob(f"{directory}/PYRO**.txt")
@@ -36,7 +44,17 @@ class Analysis:
 
             self.sta_files.append(file)
 
-    def load_file(self, path, filter: Filter = None):
+    def check_filter_parameters(self):
+        return
+
+    def load_file(self, path: str, filter: Filter = None):
+        """Loads single file from directory and assigns given filter.
+
+        Args:
+            path (str): File path
+            filter (Filter, optional): Filter:class to assign.
+                yDefaults to None.
+        """
         beta = get_beta(path)
         if filter is None:
             default_filter = FILTERS.get(beta)
@@ -46,7 +64,7 @@ class Analysis:
         self.sta_files.append(file)
 
     def run(self):
-        # use process method from STAfile
+        """Runs process method for all stafiles:STAfile in self.sta_files"""
         for file in self.sta_files:
             file.process()
             file.calculate_local_minima()
