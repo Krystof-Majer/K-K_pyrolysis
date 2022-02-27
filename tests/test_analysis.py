@@ -12,4 +12,8 @@ def analysis():
 
 def test_load_files(analysis):
     analysis.load_files(DIRECTORY)
-    assert len(analysis) == 4
+    assert len(analysis) == 3
+
+
+def test_run(analysis):
+    pass

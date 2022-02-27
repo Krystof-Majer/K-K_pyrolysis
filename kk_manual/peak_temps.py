@@ -11,7 +11,7 @@ from scipy.signal import argrelextrema
 # Used for tuning the process !!NOT FINAL!!
 
 # number of points to check against VULNERABLE TO DATA SIZE!!!
-MINORDER = 10
+MINORDER = 7
 # Temperature (K) interval to search for mins. Will be bound to filter response
 MIN_INTERVAL = (
     500,
@@ -24,8 +24,8 @@ MIN_INTERVAL = (
 # 10 K  cutoff = 0.25 window = 87
 # 05 K  cutoff = 0.2 window = 191
 
-CUTOFF = 0.2
-WINSIZE = 191
+CUTOFF = 2.5
+WINSIZE = 41
 F_TYPE = "hamming"
 
 #  Hamming filter with cutoff of half of Nqyist frequency
@@ -152,7 +152,7 @@ def main():
     # set working directory to where is this script
     chdir(dirname(__file__))
 
-    file_path = "PYRO_MDF_30_900_N2_05Kmin_recal_02.txt"
+    file_path = "PYRO_MDF_30_900_N2_30Kmin_recal_02.txt"
     beta = get_beta(file_path)
 
     df = process(file_path)
@@ -162,9 +162,14 @@ def main():
     print(f"--- points for: {beta} K step ---")
 
     #  Output of all found Tpoints
-    b = [tup[0] for tup in points]
-    print(*b, sep="\n")
+    print(*points, sep="\n")
     plt.show()
+    df.to_csv(
+        r"pandas_output.txt",
+        index=None,
+        sep=",",
+        mode="a",
+    )
 
 
 if __name__ == "__main__":

@@ -14,16 +14,18 @@ class Analysis:
         return len(self.sta_files)
 
     def load_files(self, directory: str):
-        self.sta_files.clear()
 
         # glob.glob() return a list of file name with specified pathname
+        self.sta_files.clear()
+
         files = glob.glob(f"{directory}/PYRO**.txt")
+
+        for path in files:
 
         for path in files:
             # Retrieves heating rate (beta)
             beta = get_beta(path)
 
-            # Default filter initialization
             default_filter = FILTERS.get(beta)
 
             if default_filter is None:
@@ -37,17 +39,6 @@ class Analysis:
 
     def run(self):
         # use process method from STAfile
-        for stafile in self.sta_files:
-            stafile.process()
-        # make data useable to find local minima
-
-    def local_minima(self):  # missing settings as arguments, maybe use default
-        # find local minima using argrelextrema
-        # save the found points somewhere
-        # enable changing point finding settings from argrelestrema
-        pass
-
-    def plot():
-        # simple placeholder to plot using matplotlib together with points
-        # separate graphs, later add show toggle
-        pass
+        for file in self.sta_files:
+            file.process()
+            file.local_minima()
