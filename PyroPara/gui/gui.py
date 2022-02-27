@@ -1,5 +1,6 @@
 from PyroPara.gui.dialogs import ReadDialog
 from PyroPara.gui.windows import MainWindow
+from PyroPara.analysis import Analysis
 
 
 class Gui:
@@ -7,6 +8,7 @@ class Gui:
         super().__init__()
 
         self.main_window = MainWindow()
+        self.analysis = Analysis()
 
         self.connect_signals()
 
@@ -24,5 +26,10 @@ class Gui:
         if not dir:
             return
 
+        analysis = self.analysis
+        analysis.load_files(dir)
+
         self.main_window.sta_files_widget.clear()
-        self.main_window.sta_files_widget.addItem(dir)
+
+        names = [sta_file.name for sta_file in analysis.sta_files]
+        self.main_window.sta_files_widget.addItems(names)

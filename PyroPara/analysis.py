@@ -13,14 +13,12 @@ class Analysis:
     def __len__(self) -> int:
         return len(self.sta_files)
 
-    def load_files(self, directory: str):
+    def load_files(self, directory: str) -> None:
 
         # glob.glob() return a list of file name with specified pathname
         self.sta_files.clear()
 
         files = glob.glob(f"{directory}/PYRO**.txt")
-
-        for path in files:
 
         for path in files:
             # Retrieves heating rate (beta)

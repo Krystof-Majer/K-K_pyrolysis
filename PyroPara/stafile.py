@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -15,6 +16,7 @@ class STAfile:
         self.filter = filter
         self.path = path
         self.beta = beta
+        self.name = os.path.basename(path)
         self.local_minima = []
 
     def load(self):
