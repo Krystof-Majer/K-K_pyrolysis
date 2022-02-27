@@ -1,6 +1,6 @@
+from PyroPara.analysis import Analysis
 from PyroPara.gui.dialogs import ReadDialog
 from PyroPara.gui.windows import MainWindow
-from PyroPara.analysis import Analysis
 
 
 class Gui:
