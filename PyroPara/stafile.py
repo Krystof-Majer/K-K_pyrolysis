@@ -89,8 +89,11 @@ class STAfile:
         self.local_minima.clear()
         points = []
 
-        while len(points) > 10 or len(points) == 0:
+        # counter  = 1
+        while True:
             points = self.find_local_minima(minorder, min_temp, max_temp)
+            if len(points) < 11 and len(points) > 0:
+                break
             minorder = +1
 
         self.local_minima.extend(points)

@@ -64,4 +64,5 @@ def test_find_local_minima(sta_file: STAfile):
 
     calculated = np.array(sta_file.find_local_minima(7, 500, 750))
     assert calculated.shape == (8, 2)
-    np.testing.assert_allclose(calculated, expected, rtol=1, atol=1)
+    print(calculated)
+    np.testing.assert_allclose(calculated, expected, rtol=0.1, atol=0.5)

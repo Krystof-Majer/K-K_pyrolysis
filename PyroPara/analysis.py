@@ -45,7 +45,7 @@ class Analysis:
             self.sta_files.append(file)
 
     def check_filter_parameters(self):
-        return
+        pass
 
     def load_file(self, path: str, filter: Filter = None):
         """Loads single file from directory and assigns given filter.

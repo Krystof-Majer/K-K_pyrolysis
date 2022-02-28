@@ -1,6 +1,7 @@
 import re
 
 BETA_REGEX = re.compile(r"/(.+)\(K/min\)")
+R = 8.314
 
 
 def get_beta(path) -> float:
@@ -14,3 +15,11 @@ def get_beta(path) -> float:
                     return float(m.group(1))
 
     raise ValueError("Unable to read temperature step from " f"file: {file}")
+
+
+def calculate_ei():
+    pass
+
+
+def calculate_ai():
+    pass
