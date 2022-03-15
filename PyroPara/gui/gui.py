@@ -27,7 +27,7 @@ class Gui:
             return
 
         analysis = self.analysis
-        analysis.load_files(dir)
+        analysis.load_all_files(dir)
 
         self.main_window.sta_files_widget.clear()
 
