@@ -36,4 +36,4 @@ class Gui:
         self.main_window.sta_files_widget.addItems(names)
 
     def plot_clicked(self) -> None:
-        print("Plot button clicked")
+        print(self.main_window.selected_files)
