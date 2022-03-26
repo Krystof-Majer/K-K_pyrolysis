@@ -2,8 +2,16 @@ from os.path import join
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
-from PySide6.QtWidgets import QMainWindow  # type: ignore
-from PySide6.QtWidgets import QListWidget, QSplitter
+from PySide6.QtWidgets import QHBoxLayout  # type: ignore
+from PySide6.QtWidgets import (
+    QGridLayout,
+    QListWidget,
+    QMainWindow,
+    QPushButton,
+    QSizePolicy,
+    QSpacerItem,
+    QWidget,
+)
 
 from PyroPara import BASE_DIR, __version__
 from PyroPara.gui.base import PlotWidget
@@ -19,28 +27,38 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"PyroPara {__version__}")
         self.resize(1024, 768)
 
-        self.main_widget: QSplitter
+        self.main_widget: QWidget = QWidget()
+        self.main_layout: QGridLayout = QGridLayout()
 
-        self.sta_files_widget = QListWidget()
+        self.sta_files_widget: QListWidget = QListWidget()
+        self.plot_button: QPushButton = QPushButton("Plot")
+
         self.menu_bar = self.menuBar()
         self.read_menu_action: QAction
 
         self.setup_ui()
 
     def setup_ui(self) -> None:
-        self.main_widget = QSplitter(Qt.Horizontal)
-        self.main_widget.setChildrenCollapsible(False)
+        self.main_widget.setLayout(self.main_layout)
         self.setCentralWidget(self.main_widget)
 
         self.plot_widget = PlotWidget()
         self.plot_widget.grid(visible=True)
         self.plot_widget.plot((0, 0.5, 1, 0), (0, 0.5, 0, 0), "r-")
 
-        self.main_widget.addWidget(self.sta_files_widget)
-        self.main_widget.addWidget(self.plot_widget)
+        buttons_layout = QHBoxLayout()
+        horizontal_spacer = QSpacerItem(
+            0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+        buttons_layout.addItem(horizontal_spacer)
+        buttons_layout.addWidget(self.plot_button)
 
-        self.main_widget.setStretchFactor(0, 1)
-        self.main_widget.setStretchFactor(1, 3)
+        self.main_layout.addWidget(self.sta_files_widget, 0, 0, 1, 1)
+        self.main_layout.addLayout(buttons_layout, 1, 0, 1, 1)
+        self.main_layout.addWidget(self.plot_widget, 0, 1, 2, 1)
+
+        self.main_layout.setColumnStretch(0, 1)
+        self.main_layout.setColumnStretch(1, 6)
 
         self.create_menus()
 
