@@ -15,8 +15,14 @@ class TgPlotWidget(PlotWidget, Tab):
     def tab_label(self) -> str:
         return "TG"
 
-    def plot(self) -> None:
-        super().plot((0, 0.5, 1, 0), (0, 0.5, 0, 0), "r-")
+    def plot(self, selected_files: list) -> None:
+        for file in selected_files:
+            x = file._df.temperature
+            y = file._df.mass_filtered
+            label = str(file.beta)
+
+            super().plot(x, y, clear=False, label=label, legend=True)
+
         super().set_axis_labels()
         self.draw()
 

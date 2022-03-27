@@ -80,7 +80,7 @@ class MainWindow(QMainWindow):
         file_menu.addAction(self.read_menu_action)
 
     @property
-    def selected_files(self) -> List[int]:
+    def selected_indices(self) -> List[int]:
         selected_indices = self.sta_files_widget.selectedIndexes()
 
         return sorted(index.row() for index in selected_indices)

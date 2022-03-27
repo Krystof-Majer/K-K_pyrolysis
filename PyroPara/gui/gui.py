@@ -35,6 +35,7 @@ class Gui:
 
         analysis = self.analysis
         analysis.load_files(dir)
+        analysis.run()
 
         main_window.sta_files_widget.clear()
 
@@ -52,8 +53,12 @@ class Gui:
         )
 
     def plot_clicked(self) -> None:
-        print(self.main_window.selected_files)
-        if not self.main_window.selected_files:
+        selected_files = [
+            self.analysis.sta_files[index]
+            for index in self.main_window.selected_indices
+        ]
+
+        if not selected_files:
             warning(text="Select STA file(s)")
 
             return
@@ -61,7 +66,7 @@ class Gui:
         plot_panel = self.plot_panel
         plot_panel.clear_widgets(plot_panel.widgets)
 
-        plot_panel.tg_widget.plot()
+        plot_panel.tg_widget.plot(selected_files)
         plot_panel.dtg_widget.plot()
         plot_panel.ddtg_widget.plot()
 
