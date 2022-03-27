@@ -7,9 +7,42 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar,
 )
 from matplotlib.figure import Figure
-from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QHBoxLayout, QTabWidget, QVBoxLayout, QWidget
 
 mpl.rcParams.update({"font.size": 14})
+
+
+class Tab:
+    _is_enabled = True
+    enabled_changed = Signal(object, bool)
+
+    @property
+    def tab_tabel(self):
+        raise NotImplementedError
+
+    @property
+    def is_enabled(self):
+        return self._is_enabled
+
+    @is_enabled.setter
+    def is_enabled(self, value):
+        if value != self._is_enabled:
+            self._is_enabled = value
+            self.enabled_changed.emit(self, self._is_enabled)
+
+
+class TabWidget(QTabWidget):
+    def __init__(self, *, widgets=None):
+        super().__init__()
+        self.widgets = widgets
+
+        for widget in self.widgets:
+            self.addTab(widget, widget.tab_label)
+
+    @property
+    def current(self):
+        return self.widgets[self.currentIndex]
 
 
 class PlotWidget(QWidget):
