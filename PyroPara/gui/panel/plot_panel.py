@@ -35,5 +35,9 @@ class PlotPanel(QWidget):
         for widget in self.widgets:
             widget.enabled_changed.connect(self.enabled_changed)
 
+    def clear_widgets(self, widgets) -> None:
+        for widget in widgets:
+            widget.clear()
+
     def enabled_changed(self, tab, is_enabled) -> None:
         self.tab_widget.setTabEnabled(tab.order, is_enabled)

@@ -1,5 +1,6 @@
 from PyroPara.analysis import Analysis
 from PyroPara.gui.dialogs import ReadDialog
+from PyroPara.gui.message_box import warning
 from PyroPara.gui.panel.plot_panel import PlotPanel
 from PyroPara.gui.windows import MainWindow
 
@@ -52,3 +53,17 @@ class Gui:
 
     def plot_clicked(self) -> None:
         print(self.main_window.selected_files)
+        if not self.main_window.selected_files:
+            warning(text="Select STA file(s)")
+
+            return
+
+        plot_panel = self.plot_panel
+        plot_panel.clear_widgets(plot_panel.widgets)
+
+        plot_panel.tg_widget.plot()
+        plot_panel.dtg_widget.plot()
+        plot_panel.ddtg_widget.plot()
+
+        for widget in plot_panel.widgets:
+            widget.is_enabled = True

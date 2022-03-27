@@ -14,34 +14,34 @@ mpl.rcParams.update({"font.size": 14})
 
 
 class Tab:
-    _is_enabled = True
-    enabled_changed = Signal(object, bool)
+    _is_enabled: bool = True
+    enabled_changed: Signal = Signal(object, bool)
 
     @property
-    def tab_tabel(self):
+    def tab_label(self) -> str:
         raise NotImplementedError
 
     @property
-    def is_enabled(self):
+    def is_enabled(self) -> bool:
         return self._is_enabled
 
     @is_enabled.setter
-    def is_enabled(self, value):
+    def is_enabled(self, value) -> None:
         if value != self._is_enabled:
             self._is_enabled = value
             self.enabled_changed.emit(self, self._is_enabled)
 
 
 class TabWidget(QTabWidget):
-    def __init__(self, *, widgets=None):
+    def __init__(self, *, widgets=None) -> None:
         super().__init__()
-        self.widgets = widgets
+        self.widgets: list = widgets
 
         for widget in self.widgets:
             self.addTab(widget, widget.tab_label)
 
     @property
-    def current(self):
+    def current(self) -> QWidget:
         return self.widgets[self.currentIndex]
 
 

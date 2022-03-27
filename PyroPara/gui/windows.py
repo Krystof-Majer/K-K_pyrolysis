@@ -45,8 +45,6 @@ class MainWindow(QMainWindow):
         self.main_widget.setLayout(self.main_layout)
         self.setCentralWidget(self.main_widget)
 
-        # self.plot_widget.plot((0, 0.5, 1, 0), (0, 0.5, 0, 0), "r-")
-
         buttons_layout = QHBoxLayout()
         horizontal_spacer = QSpacerItem(
             0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum
