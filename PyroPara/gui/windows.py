@@ -32,8 +32,19 @@ class MainWindow(QMainWindow):
 
         self.create_left_panel()
         self.create_right_panel()
-
+        self.create_middle_panel()
         self.setup_ui()
+
+    def create_left_panel(self):
+        self.left_panel = QSplitter(Qt.Vertical)
+        self.left_panel.setChildrenCollapsible(False)
+
+    def create_right_panel(self):
+        self.right_panel = QSplitter(Qt.Vertical)
+        self.right_panel.setChildrenCollapsible(False)
+
+    def create_middle_panel(self):
+        pass
 
     def setup_ui(self) -> None:
         # setting up main widget
@@ -68,14 +79,6 @@ class MainWindow(QMainWindow):
         self.create_menus()
         self.button_actions()
 
-    def create_left_panel(self):
-        self.left_panel = QSplitter(Qt.Vertical)
-        self.left_panel.setChildrenCollapsible(False)
-
-    def create_right_panel(self):
-        self.right_panel = QSplitter(Qt.Vertical)
-        self.right_panel.setChildrenCollapsible(False)
-
     def create_menus(self) -> None:
         self.create_file_menu()
 
@@ -90,9 +93,9 @@ class MainWindow(QMainWindow):
         file_menu.addAction(self.read_menu_action)
 
     def button_actions(self) -> None:
-        self.run_buttom()
+        self.run_button_widget()
 
-    def run_button(self):
+    def run_button_widget(self):
         self.run_button_action = QAction(self)
         self.run_button_action.setShortcut(Qt.Key_F1)
         self.run_button.addAction(self.run_button_action)
