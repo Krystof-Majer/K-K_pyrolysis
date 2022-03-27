@@ -19,6 +19,7 @@ class Gui:
         window = self.main_window
 
         window.read_menu_action.triggered.connect(self.open_clicked)
+        window.run_button_action.triggerd.connect(self.run_button_clicked)
 
     def open_clicked(self) -> None:
         dir = ReadDialog(self.main_window).show()
@@ -33,3 +34,6 @@ class Gui:
 
         names = [sta_file.name for sta_file in analysis.sta_files]
         self.main_window.sta_files_widget.addItems(names)
+
+    def run_button_clicked(self) -> None:
+        pass

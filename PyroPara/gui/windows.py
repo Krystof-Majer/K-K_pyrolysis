@@ -66,6 +66,7 @@ class MainWindow(QMainWindow):
         self.main_widget.setStretchFactor(1, 3)
 
         self.create_menus()
+        self.button_actions()
 
     def create_left_panel(self):
         self.left_panel = QSplitter(Qt.Vertical)
@@ -87,3 +88,11 @@ class MainWindow(QMainWindow):
         self.read_menu_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_R))
 
         file_menu.addAction(self.read_menu_action)
+
+    def button_actions(self) -> None:
+        self.run_buttom()
+
+    def run_button(self):
+        self.run_button_action = QAction(self)
+        self.run_button_action.setShortcut(Qt.Key_F1)
+        self.run_button.addAction(self.run_button_action)
