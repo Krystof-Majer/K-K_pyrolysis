@@ -1,5 +1,6 @@
 from PyroPara.analysis import Analysis
 from PyroPara.gui.dialogs import ReadDialog
+from PyroPara.gui.panel.plot_panel import PlotPanel
 from PyroPara.gui.windows import MainWindow
 
 
@@ -7,7 +8,9 @@ class Gui:
     def __init__(self) -> None:
         super().__init__()
 
-        self.main_window = MainWindow()
+        self.plot_panel = PlotPanel()
+
+        self.main_window = MainWindow(plot_panel=self.plot_panel)
         self.analysis = Analysis()
 
         self.connect_signals()
@@ -22,7 +25,9 @@ class Gui:
         window.plot_button.clicked.connect(self.plot_clicked)
 
     def open_clicked(self) -> None:
-        dir = ReadDialog(self.main_window).show()
+        main_window = self.main_window
+
+        dir = ReadDialog(main_window).show()
 
         if not dir:
             return
@@ -30,10 +35,20 @@ class Gui:
         analysis = self.analysis
         analysis.load_files(dir)
 
-        self.main_window.sta_files_widget.clear()
+        main_window.sta_files_widget.clear()
 
         names = [sta_file.name for sta_file in analysis.sta_files]
-        self.main_window.sta_files_widget.addItems(names)
+        main_window.sta_files_widget.addItems(names)
+
+        if names:
+            main_window.set_button_enabled(
+                main_window.plot_button, is_enabled=True
+            )
+            return
+
+        main_window.set_button_enabled(
+            main_window.plot_button, is_enabled=False
+        )
 
     def plot_clicked(self) -> None:
         print(self.main_window.selected_files)

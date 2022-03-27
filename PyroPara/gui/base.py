@@ -56,8 +56,9 @@ class PlotWidget(QWidget):
     X_UNIT = "unit"
     Y_UNIT = "unit"
 
-    def __init__(self) -> None:
+    def __init__(self, order) -> None:
         super().__init__()
+        self.order = order
         self.figure = Figure()
         self.figure.subplots_adjust(
             left=self.LEFT,

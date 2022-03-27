@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (
 )
 
 from PyroPara import BASE_DIR, __version__
-from PyroPara.gui.base import PlotWidget
+from PyroPara.gui.panel.plot_panel import PlotPanel
 
 
 def get_icon(name):
@@ -24,10 +24,9 @@ def get_icon(name):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self) -> None:
+    def __init__(self, *, plot_panel: PlotPanel = None) -> None:
         super().__init__()
-        self.setWindowTitle(f"PyroPara {__version__}")
-        self.resize(1024, 768)
+        self.plot_panel = plot_panel
 
         self.main_widget: QWidget = QWidget()
         self.main_layout: QGridLayout = QGridLayout()
@@ -41,17 +40,18 @@ class MainWindow(QMainWindow):
         self.setup_ui()
 
     def setup_ui(self) -> None:
+        self.setWindowTitle(f"PyroPara {__version__}")
+        self.resize(1024, 768)
         self.main_widget.setLayout(self.main_layout)
         self.setCentralWidget(self.main_widget)
 
-        self.plot_widget = PlotWidget()
-        self.plot_widget.grid(visible=True)
-        self.plot_widget.plot((0, 0.5, 1, 0), (0, 0.5, 0, 0), "r-")
+        # self.plot_widget.plot((0, 0.5, 1, 0), (0, 0.5, 0, 0), "r-")
 
         buttons_layout = QHBoxLayout()
         horizontal_spacer = QSpacerItem(
             0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
+        self.set_button_enabled(self.plot_button, is_enabled=False)
         buttons_layout.addItem(horizontal_spacer)
         buttons_layout.addWidget(self.plot_button)
 
@@ -61,7 +61,7 @@ class MainWindow(QMainWindow):
 
         self.main_layout.addWidget(self.sta_files_widget, 0, 0, 1, 1)
         self.main_layout.addLayout(buttons_layout, 1, 0, 1, 1)
-        self.main_layout.addWidget(self.plot_widget, 0, 1, 2, 1)
+        self.main_layout.addWidget(self.plot_panel, 0, 1, 2, 1)
 
         self.main_layout.setColumnStretch(0, 1)
         self.main_layout.setColumnStretch(1, 6)
@@ -86,3 +86,6 @@ class MainWindow(QMainWindow):
         selected_indices = self.sta_files_widget.selectedIndexes()
 
         return sorted(index.row() for index in selected_indices)
+
+    def set_button_enabled(self, button, *, is_enabled=True) -> None:
+        button.setEnabled(is_enabled)
