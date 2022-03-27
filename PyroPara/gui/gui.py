@@ -67,8 +67,8 @@ class Gui:
         plot_panel.clear_widgets(plot_panel.widgets)
 
         plot_panel.tg_widget.plot(selected_files)
-        plot_panel.dtg_widget.plot()
-        plot_panel.ddtg_widget.plot()
+        plot_panel.dtg_widget.plot(selected_files)
+        plot_panel.ddtg_widget.plot(selected_files)
 
         for widget in plot_panel.widgets:
             widget.is_enabled = True

@@ -20,7 +20,6 @@ class TgPlotWidget(PlotWidget, Tab):
             x = file._df.temperature
             y = file._df.mass_filtered
             label = str(file.beta)
-
             super().plot(x, y, clear=False, label=label, legend=True)
 
         super().set_axis_labels()
@@ -40,8 +39,13 @@ class DtgPlotWidget(PlotWidget, Tab):
     def tab_label(self) -> str:
         return "DTG"
 
-    def plot(self) -> None:
-        super().plot((0, 0.5, 1, 0), (0, 0.5, 0, 0), "g-")
+    def plot(self, selected_files: list) -> None:
+        for file in selected_files:
+            x = file._df.temperature
+            y = file._df.mass_diff_filtered
+            label = str(file.beta)
+            super().plot(x, y, clear=False, label=label, legend=True)
+
         super().set_axis_labels()
         self.draw()
 
@@ -59,7 +63,12 @@ class DdtgPlotWidget(PlotWidget, Tab):
     def tab_label(self) -> str:
         return "DDTG"
 
-    def plot(self) -> None:
-        super().plot((0, 0.5, 1, 0), (0, 0.5, 0, 0), "b-")
+    def plot(self, selected_files: list) -> None:
+        for file in selected_files:
+            x = file._df.temperature
+            y = file._df.mass_diff2_filtered
+            label = str(file.beta)
+            super().plot(x, y, clear=False, label=label, legend=True)
+
         super().set_axis_labels()
         self.draw()
