@@ -39,10 +39,10 @@ class Gui:
 
         main_window.sta_files_widget.clear()
 
-        names = [sta_file.name for sta_file in analysis.sta_files]
-        main_window.sta_files_widget.addItems(names)
+        file_names = [sta_file.name for sta_file in analysis.sta_files]
+        main_window.sta_files_widget.add_files(file_names)
 
-        if names:
+        if file_names:
             main_window.set_button_enabled(
                 main_window.plot_button, is_enabled=True
             )
@@ -53,14 +53,13 @@ class Gui:
         )
 
     def plot_clicked(self) -> None:
+        selected_indices = self.main_window.sta_files_widget.selected_indices
         selected_files = [
-            self.analysis.sta_files[index]
-            for index in self.main_window.selected_indices
+            self.analysis.sta_files[index] for index in selected_indices
         ]
 
         if not selected_files:
             warning(text="Select STA file(s)")
-
             return
 
         plot_panel = self.plot_panel
