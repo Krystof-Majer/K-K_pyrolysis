@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QWidget,
+    QFrame,
 )
 
 
@@ -23,8 +24,10 @@ class FileSelectWidget(QWidget):
         self.file_list = QListWidget(self)
         vertical_layout.addWidget(self.file_list)
 
-        vertical_layout.addWidget(self.button_group)
-        self.button_layout: QHBoxLayout = QHBoxLayout(self.button_group)
+        button_group = QFrame(self)
+        vertical_layout.addWidget(button_group)
+
+        self.button_layout: QHBoxLayout = QHBoxLayout(button_group)
         self.create_buttons()
 
     def create_buttons(self) -> None:
@@ -56,13 +59,13 @@ class FileSelectWidget(QWidget):
 
         return []
 
-    def clear(self) -> None:
+    def clear_all_clicked(self) -> None:
         self.file_list.clear()
 
     def select_all_clicked(self) -> None:
         self.file_list.selectAll()
 
-    def clear_all_clicked(self) -> None:
+    def clear_selection_clicked(self) -> None:
         self.file_list.clearSelection()
 
     def invert_clicked(self) -> None:

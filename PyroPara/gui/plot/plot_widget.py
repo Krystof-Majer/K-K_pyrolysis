@@ -27,6 +27,10 @@ class TgPlot(PlotWidget, Tab):
     def __init__(self, index) -> None:
         super().__init__(index)
 
+    @property
+    def tab_label(self) -> str:
+        return "TG"
+
     def plot(self, files: list) -> None:
         for file in files:
             x = file._df.temperature
@@ -46,6 +50,10 @@ class DtgPlot(PlotWidget, Tab):
 
     def __init__(self, index) -> None:
         super().__init__(index)
+
+    @property
+    def tab_label(self) -> str:
+        return "DTG"
 
     def plot(self, files: list) -> None:
         for file in files:
@@ -70,6 +78,10 @@ class DdtgPlot(PlotWidget, Tab):
 
     def __init__(self, index) -> None:
         super().__init__(index)
+
+    @property
+    def tab_label(self) -> str:
+        return "DDTG"
 
     def plot(self, files: list) -> None:
         for file in files:

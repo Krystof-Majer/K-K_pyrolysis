@@ -1,19 +1,18 @@
-from PySide6.QtWidgets import QGridLayout, QWidget, QTabWidget
-from matplotlib import widgets
+from PySide6.QtWidgets import QVBoxLayout, QWidget, QTabWidget
 from PyroPara.gui.plot.plot_widget import (
     TgPlot,
     DtgPlot,
     DdtgPlot,
 )
 
-# Unused
+
 class TabWidget(QTabWidget):
     def __init__(self, *, plotwidgets=None) -> None:
         super().__init__()
         self.widgets: list = plotwidgets
 
         for widget in self.widgets:
-            self.addTab(widget, widget.label)
+            self.addTab(widget, widget.tab_label)
 
     @property
     def index(self):
@@ -24,18 +23,15 @@ class PlotPanel(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        self.Tg_plot: TgPlot = TgPlot()
-        self.Dtg_plot: DtgPlot = DtgPlot()
-        self.Ddtg_plot: DdtgPlot = DdtgPlot()
-
-        self.widgets = (self.Tg_plot, self.Dtg_plot, self.Ddtg_plot)
-        self.tab_widget: TabWidget = QTabWidget(self.widgets)
-
-        for widget in self.widgets:
-            self.tab_widget.addTab(widget, widget.label)
-
-        main_layout = QGridLayout()
+        main_layout = QVBoxLayout()
         self.setLayout(main_layout)
+
+        self.tg_plot: TgPlot = TgPlot(0)
+        self.dtg_plot: DtgPlot = DtgPlot(1)
+        self.ddtg_plot: DdtgPlot = DdtgPlot(2)
+
+        self.widgets = (self.tg_plot, self.dtg_plot, self.ddtg_plot)
+        self.tab_widget: QTabWidget = TabWidget(plotwidgets=self.widgets)
 
         main_layout.addWidget(self.tab_widget)
 
