@@ -33,11 +33,12 @@ class Gui:
 
         analysis = self.analysis
         analysis.load_all_files(dir)
+        analysis.run()
 
         self.main_window.sta_files_widget.clear()
 
-        names = [sta_file.name for sta_file in analysis.sta_files]
-        self.main_window.sta_files_widget.addItems(names)
+        file_names = [sta_file.path for sta_file in analysis.sta_files]
+        self.main_window.sta_files_widget.add_files(file_names)
 
     def plot_clicked(self):
         pass

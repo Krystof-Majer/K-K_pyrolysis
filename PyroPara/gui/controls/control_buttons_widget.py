@@ -13,7 +13,7 @@ class ControlButtons(QWidget):
         self.buttons_layout.addWidget(self.plot_button)
         self.buttons_layout.addWidget(self.test_button)
 
-        self.set_button_enabled(self.plot_button, is_enabled=False)
+        self.set_button_enabled(self.plot_button, is_enabled=True)
 
     def set_button_enabled(self, button, *, is_enabled=True) -> None:
         button.setEnabled(is_enabled)

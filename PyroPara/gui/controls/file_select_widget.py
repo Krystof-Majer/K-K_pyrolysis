@@ -59,6 +59,9 @@ class FileSelectWidget(QWidget):
 
         return []
 
+    def clear(self) -> None:
+        self.file_list.clear()
+
     def clear_all_clicked(self) -> None:
         self.file_list.clear()
 
