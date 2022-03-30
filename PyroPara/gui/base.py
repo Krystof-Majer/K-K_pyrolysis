@@ -9,6 +9,7 @@ from matplotlib.backends.backend_qt5agg import (
 from matplotlib.figure import Figure
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 
+
 mpl.rcParams.update({"font.size": 14})
 
 
@@ -23,9 +24,10 @@ class PlotWidget(QWidget):
     X_UNIT = "unit"
     Y_UNIT = "unit"
 
-    def __init__(self) -> None:
+    def __init__(self, order) -> None:
         super().__init__()
         self.figure = Figure()
+        self.order = order
         self.figure.subplots_adjust(
             left=self.LEFT,
             right=self.RIGHT,
