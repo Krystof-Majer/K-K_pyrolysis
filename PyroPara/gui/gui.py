@@ -12,7 +12,7 @@ class Gui:
         self.plot_panel = PlotPanel()
         self.main_window = MainWindow(plot_panel=self.plot_panel)
         self.analysis = Analysis()
-        self.control_buttons = ControlButtons()
+        self.control_buttons = self.main_window.control_buttons_widget
         self.connect_signals()
 
     def show(self) -> None:
@@ -24,6 +24,7 @@ class Gui:
 
         window.read_menu_action.triggered.connect(self.open_clicked)
         controls.plot_button.clicked.connect(self.plot_clicked)
+        print("connect_signals")  # ------
 
     def open_clicked(self) -> None:
         dir = ReadDialog(self.main_window).show()
@@ -41,4 +42,14 @@ class Gui:
         self.main_window.sta_files_widget.add_files(file_names)
 
     def plot_clicked(self):
-        pass
+        print("clicked")
+        selected_indices = self.main_window.sta_files_widget.selected_indices
+        selected_files = [
+            self.analysis.sta_files[index] for index in selected_indices
+        ]
+
+        plot_panel = self.plot_panel
+        plot_panel.clear_widgets(plot_panel.widgets)
+        plot_panel.tg_plot.plot(selected_files)
+        plot_panel.dtg_plot.plot(selected_files)
+        plot_panel.ddtg_plot.plot(selected_files)

@@ -36,7 +36,7 @@ class TgPlot(PlotWidget, Tab):
             x = file._df.temperature
             y = file._df.mass_filtered
             label = str(f"{file.beta} K")
-            super().plot(x, y, legend=True, label=label)
+            super().plot(x, y, clear=False, legend=True, label=label)
         super().set_axis_labels()
         self.draw()
 
@@ -58,9 +58,9 @@ class DtgPlot(PlotWidget, Tab):
     def plot(self, files: list) -> None:
         for file in files:
             x = file._df.temperature
-            y = file._df.mass_filtered
+            y = file._df.mass_diff_filtered
             label = str(f"{file.beta} K")
-            super().plot(x, y, legend=True, label=label)
+            super().plot(x, y, clear=False, legend=True, label=label)
         super().set_axis_labels()
         self.draw()
 
@@ -86,8 +86,8 @@ class DdtgPlot(PlotWidget, Tab):
     def plot(self, files: list) -> None:
         for file in files:
             x = file._df.temperature
-            y = file._df.mass_filtered
+            y = file._df.mass_diff2_filtered
             label = str(f"{file.beta} K")
-            super().plot(x, y, legend=True, label=label)
+            super().plot(x, y, clear=False, legend=True, label=label)
         super().set_axis_labels()
         self.draw()

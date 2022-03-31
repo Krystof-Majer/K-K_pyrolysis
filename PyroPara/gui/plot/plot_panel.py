@@ -31,7 +31,7 @@ class PlotPanel(QWidget):
         self.ddtg_plot: DdtgPlot = DdtgPlot(2)
 
         self.widgets = (self.tg_plot, self.dtg_plot, self.ddtg_plot)
-        self.tab_widget: QTabWidget = TabWidget(plotwidgets=self.widgets)
+        self.tab_widget: TabWidget = TabWidget(plotwidgets=self.widgets)
 
         main_layout.addWidget(self.tab_widget)
 
@@ -39,6 +39,6 @@ class PlotPanel(QWidget):
     def current_tab_widget(self) -> QWidget:
         return self.tab_widget.widgets[self.tab_widget.currentIndex]
 
-    def clear_widgets(self, widgets: list) -> None:
-        for entry in widgets:
+    def clear_widgets(self, plotwidgets: list) -> None:
+        for entry in plotwidgets:
             entry.clear()
