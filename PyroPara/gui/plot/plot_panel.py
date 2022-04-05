@@ -32,8 +32,11 @@ class PlotPanel(QWidget):
 
         self.widgets = (self.tg_plot, self.dtg_plot, self.ddtg_plot)
         self.tab_widget: TabWidget = TabWidget(plotwidgets=self.widgets)
-
         main_layout.addWidget(self.tab_widget)
+        self.connect_signals()
+
+        for widget in self.widgets[:1]:
+            widget.is_enabled = False
 
     @property
     def current_tab_widget(self) -> QWidget:
@@ -42,3 +45,10 @@ class PlotPanel(QWidget):
     def clear_widgets(self, plotwidgets: list) -> None:
         for entry in plotwidgets:
             entry.clear()
+
+    def enabled_change(self, tab, is_enabled) -> None:
+        self.tab_widget.setTabEnabled(tab.order, is_enabled)
+
+    def connect_signals(self) -> None:
+        for widget in self.widgets:
+            widget.enabled_changed.connect(self.enabled_change)

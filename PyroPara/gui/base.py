@@ -1,5 +1,4 @@
 from typing import Any
-
 import matplotlib as mpl
 import matplotlib.ticker as mticker
 from matplotlib.backends.backend_qt5agg import FigureCanvas
@@ -8,9 +7,25 @@ from matplotlib.backends.backend_qt5agg import (
 )
 from matplotlib.figure import Figure
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
+from PySide6.QtCore import Signal
 
 
 mpl.rcParams.update({"font.size": 14})
+
+
+class TabStatus:
+    enabled_changed: Signal = Signal(object, bool)
+    _is_enabled: bool = True
+
+    @property
+    def is_enabled(self) -> bool:
+        return self._is_enabled
+
+    @is_enabled.setter
+    def is_enabled(self, value) -> None:
+        if value != self._is_enabled:
+            self._is_enabled = value
+            self.enabled_changed.emit(self, self._is_enabled)
 
 
 class PlotWidget(QWidget):
@@ -60,8 +75,8 @@ class PlotWidget(QWidget):
     def ylim(self) -> float:
         return self.axis.get_ylim()
 
-    def set_ylim(self, ylim: float) -> None:
-        self.axis.set_ylim(ylim)
+    def set_ylim(self, lower: float, upper: float) -> None:
+        self.axis.set_ylim(lower, upper)
 
     def format_coord(self, x: float, y: float) -> None:
         axial, radial = x, y

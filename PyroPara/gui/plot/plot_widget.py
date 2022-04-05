@@ -1,23 +1,8 @@
 from PyroPara.gui.base import PlotWidget
-from PySide6.QtCore import Signal
-
-# Unused
-class Tab:
-    _is_enabled: bool = True
-    enabled_changed: Signal = Signal(object, bool)
-
-    @property
-    def is_enabled(self) -> bool:
-        return self._is_enabled
-
-    @is_enabled.setter
-    def is_enabled(self, value) -> None:
-        if value != self._is_enabled:
-            self._is_enabled = value
-            self.enabled_changed.emit(self, self._is_enabled)
+from PyroPara.gui.base import TabStatus
 
 
-class TgPlot(PlotWidget, Tab):
+class TgPlot(PlotWidget, TabStatus):
 
     X_LABEL = "T"
     Y_LABEL = "TG"
@@ -37,11 +22,11 @@ class TgPlot(PlotWidget, Tab):
             y = file._df.mass_filtered
             label = str(f"{file.beta} K")
             super().plot(x, y, clear=False, legend=True, label=label)
-        super().set_axis_labels()
+            super().set_ylim(0, 1.1)
         self.draw()
 
 
-class DtgPlot(PlotWidget, Tab):
+class DtgPlot(PlotWidget, TabStatus):
 
     X_LABEL = "T"
     Y_LABEL = "DTG"
@@ -50,6 +35,7 @@ class DtgPlot(PlotWidget, Tab):
 
     def __init__(self, index) -> None:
         super().__init__(index)
+        self.set_axis_labels()
 
     @property
     def tab_label(self) -> str:
@@ -69,12 +55,12 @@ class DtgPlot(PlotWidget, Tab):
         return ""
 
 
-class DdtgPlot(PlotWidget, Tab):
+class DdtgPlot(PlotWidget, TabStatus):
 
     X_LABEL = "T"
     Y_LABEL = "DDTG"
     X_UNIT = "K"
-    Y_UNIT = "1/s^2"
+    Y_UNIT = "1/s²"
 
     def __init__(self, index) -> None:
         super().__init__(index)

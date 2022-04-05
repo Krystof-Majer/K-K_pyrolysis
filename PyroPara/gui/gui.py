@@ -2,7 +2,6 @@ from PyroPara.analysis import Analysis
 from PyroPara.gui.dialogs import ReadDialog
 from PyroPara.gui.windows import MainWindow
 from PyroPara.gui.plot.plot_panel import PlotPanel
-from PyroPara.gui.controls.control_buttons_widget import ControlButtons
 
 
 class Gui:
@@ -24,10 +23,10 @@ class Gui:
 
         window.read_menu_action.triggered.connect(self.open_clicked)
         controls.plot_button.clicked.connect(self.plot_clicked)
-        print("connect_signals")  # ------
 
     def open_clicked(self) -> None:
         dir = ReadDialog(self.main_window).show()
+        button = self.control_buttons
 
         if not dir:
             return
@@ -38,11 +37,14 @@ class Gui:
 
         self.main_window.sta_files_widget.clear()
 
-        file_names = [sta_file.path for sta_file in analysis.sta_files]
+        file_names = [sta_file.name for sta_file in analysis.sta_files]
         self.main_window.sta_files_widget.add_files(file_names)
 
+        if file_names:
+            button.set_button_enabled(button.plot_button, is_enabled=True)
+            return
+
     def plot_clicked(self):
-        print("clicked")
         selected_indices = self.main_window.sta_files_widget.selected_indices
         selected_files = [
             self.analysis.sta_files[index] for index in selected_indices
@@ -53,3 +55,6 @@ class Gui:
         plot_panel.tg_plot.plot(selected_files)
         plot_panel.dtg_plot.plot(selected_files)
         plot_panel.ddtg_plot.plot(selected_files)
+
+        for widget in plot_panel.widgets:
+            widget.is_enabled = True

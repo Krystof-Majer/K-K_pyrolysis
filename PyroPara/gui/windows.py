@@ -54,6 +54,9 @@ class MainWindow(QMainWindow):
     def create_menus(self) -> None:
         self.create_file_menu()
 
+    def get_icon(name):
+        return QIcon(join(BASE_DIR, f"gui/icons/{name}.png"))
+
     def create_file_menu(self) -> None:
         file_menu = self.menu_bar.addMenu("&File")
 
