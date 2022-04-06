@@ -33,25 +33,26 @@ class FileSelectWidget(QWidget):
         self.create_buttons()
 
     def create_buttons(self) -> None:
-        clear_selection_button = QPushButton("clear selected")
+        clear_selection_button = QPushButton("◻")
         clear_selection_button.setToolTip("clear selected")
         clear_selection_button.clicked.connect(self.clear_selection_clicked)
-        self.button_layout.addWidget(clear_selection_button)
 
-        clear_all_button = QPushButton("clear all")
+        clear_all_button = QPushButton("☒")
         clear_all_button.setToolTip("clear all")
         clear_all_button.clicked.connect(self.clear_all_clicked)
-        self.button_layout.addWidget(clear_all_button)
 
-        select_all_button = QPushButton("select all")
+        select_all_button = QPushButton("◼")
         select_all_button.setToolTip("select all")
         select_all_button.clicked.connect(self.select_all_clicked)
-        self.button_layout.addWidget(select_all_button)
 
-        invert_button = QPushButton("invert")
+        invert_button = QPushButton("◩")
         invert_button.setToolTip("invert selected")
         invert_button.clicked.connect(self.invert_clicked)
+
+        self.button_layout.addWidget(select_all_button)
         self.button_layout.addWidget(invert_button)
+        self.button_layout.addWidget(clear_selection_button)
+        self.button_layout.addWidget(clear_all_button)
 
     @property
     def selected_indices(self) -> List[int]:

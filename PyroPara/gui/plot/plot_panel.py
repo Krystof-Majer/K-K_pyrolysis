@@ -35,7 +35,7 @@ class PlotPanel(QWidget):
         main_layout.addWidget(self.tab_widget)
         self.connect_signals()
 
-        for widget in self.widgets[:1]:
+        for widget in self.widgets[1:]:
             widget.is_enabled = False
 
     @property
