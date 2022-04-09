@@ -1,5 +1,4 @@
-from PyroPara.gui.base import PlotWidget
-from PyroPara.gui.base import TabStatus
+from PyroPara.gui.base import PlotWidget, TabStatus
 
 
 class TgPlot(PlotWidget, TabStatus):
@@ -22,7 +21,7 @@ class TgPlot(PlotWidget, TabStatus):
             y = file._df.mass_filtered
             label = str(f"{file.beta} K")
             super().plot(x, y, clear=False, legend=True, label=label)
-            super().set_ylim(0, 1.1)
+            super().set_ylim(0, 1.05)
         self.draw()
 
 

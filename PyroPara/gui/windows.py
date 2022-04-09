@@ -2,17 +2,12 @@ from os.path import join
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
-from PySide6.QtWidgets import (
-    QGridLayout,
-    QMainWindow,
-    QWidget,
-)
-
+from PySide6.QtWidgets import QGridLayout, QMainWindow, QWidget
 
 from PyroPara import BASE_DIR, __version__
-from PyroPara.gui.plot.plot_panel import PlotPanel
 from PyroPara.gui.controls.control_buttons_widget import ControlButtons
 from PyroPara.gui.controls.file_select_widget import FileSelectWidget
+from PyroPara.gui.plot.plot_panel import PlotPanel
 
 
 def get_icon(name):

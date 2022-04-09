@@ -1,7 +1,7 @@
 from PyroPara.analysis import Analysis
 from PyroPara.gui.dialogs import ReadDialog
-from PyroPara.gui.windows import MainWindow
 from PyroPara.gui.plot.plot_panel import PlotPanel
+from PyroPara.gui.windows import MainWindow
 
 
 class Gui:
@@ -22,6 +22,9 @@ class Gui:
         controls = self.control_buttons
 
         window.read_menu_action.triggered.connect(self.open_clicked)
+        window.sta_files_widget.delete_selection_button.clicked.connect(
+            self.remove_plot
+        )
         controls.plot_button.clicked.connect(self.plot_clicked)
 
     def open_clicked(self) -> None:
@@ -37,7 +40,10 @@ class Gui:
 
         self.main_window.sta_files_widget.clear()
 
-        file_names = [sta_file.name for sta_file in analysis.sta_files]
+        file_names = [
+            sta_file.name
+            for sta_file in sorted(analysis.sta_files, key=lambda x: x.beta)
+        ]
         self.main_window.sta_files_widget.add_files(file_names)
 
         if file_names:
@@ -58,3 +64,7 @@ class Gui:
 
         for widget in plot_panel.widgets:
             widget.is_enabled = True
+
+    # Incomplete
+    def remove_plot(self):
+        pass

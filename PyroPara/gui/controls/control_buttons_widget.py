@@ -1,10 +1,13 @@
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
-    QWidget,
     QHBoxLayout,
     QPushButton,
     QSizePolicy,
     QSpacerItem,
+    QWidget,
 )
+
+FONT = QFont("Times", 10, QFont.Bold)
 
 
 class ControlButtons(QWidget):
@@ -16,6 +19,8 @@ class ControlButtons(QWidget):
         self.buttons_layout.addItem(spacer)
 
         self.plot_button = QPushButton("PLOT")
+        self.plot_button.setFont(FONT)
+        self.plot_button.resize(40, 30)
         # self.test_button = QPushButton("test")
 
         self.buttons_layout.addWidget(self.plot_button)

@@ -1,13 +1,16 @@
 from typing import List
+
 from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QFrame,
     QGroupBox,
     QHBoxLayout,
     QListWidget,
     QPushButton,
+    QSizePolicy,
+    QSpacerItem,
     QVBoxLayout,
     QWidget,
-    QFrame,
-    QAbstractItemView,
 )
 
 
@@ -16,6 +19,7 @@ class FileSelectWidget(QWidget):
         super().__init__()
 
         file_list_group = QGroupBox()
+        file_list_group.setTitle("STA files")
 
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(file_list_group)
@@ -30,29 +34,37 @@ class FileSelectWidget(QWidget):
         vertical_layout.addWidget(button_group)
 
         self.button_layout: QHBoxLayout = QHBoxLayout(button_group)
+        self.button_layout.addItem(QSpacerItem(100, 20, QSizePolicy.Fixed))
+
         self.create_buttons()
 
     def create_buttons(self) -> None:
-        clear_selection_button = QPushButton("◻")
-        clear_selection_button.setToolTip("clear selected")
-        clear_selection_button.clicked.connect(self.clear_selection_clicked)
+        self.delete_selection_button = QPushButton("◻")
+        self.delete_selection_button.setToolTip("Delete selected")
+        self.delete_selection_button.setFixedSize(20, 20)
+        self.delete_selection_button.clicked.connect(
+            self.delete_selection_clicked
+        )
 
-        clear_all_button = QPushButton("☒")
-        clear_all_button.setToolTip("clear all")
-        clear_all_button.clicked.connect(self.clear_all_clicked)
+        deselect_all_button = QPushButton("☒")
+        deselect_all_button.setToolTip("Deselect all")
+        deselect_all_button.setFixedSize(20, 20)
+        deselect_all_button.clicked.connect(self.deselect_all_clicked)
 
         select_all_button = QPushButton("◼")
-        select_all_button.setToolTip("select all")
+        select_all_button.setToolTip("Select all")
+        select_all_button.setFixedSize(20, 20)
         select_all_button.clicked.connect(self.select_all_clicked)
 
         invert_button = QPushButton("◩")
-        invert_button.setToolTip("invert selected")
+        invert_button.setToolTip("Invert selected")
+        invert_button.setFixedSize(20, 20)
         invert_button.clicked.connect(self.invert_clicked)
 
         self.button_layout.addWidget(select_all_button)
         self.button_layout.addWidget(invert_button)
-        self.button_layout.addWidget(clear_selection_button)
-        self.button_layout.addWidget(clear_all_button)
+        self.button_layout.addWidget(deselect_all_button)
+        self.button_layout.addWidget(self.delete_selection_button)
 
     @property
     def selected_indices(self) -> List[int]:
@@ -66,13 +78,15 @@ class FileSelectWidget(QWidget):
     def clear(self) -> None:
         self.file_list.clear()
 
-    def clear_all_clicked(self) -> None:
-        self.file_list.clear()
+    def deselect_all_clicked(self) -> None:
+        for i in range(self.file_list.count()):
+            file = self.file_list.item(i)
+            file.setSelected(False)
 
     def select_all_clicked(self) -> None:
         self.file_list.selectAll()
 
-    def clear_selection_clicked(self) -> None:
+    def delete_selection_clicked(self) -> None:
         list_items = self.file_list.selectedItems()
         if not list_items:
             return

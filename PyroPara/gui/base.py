@@ -1,4 +1,5 @@
 from typing import Any
+
 import matplotlib as mpl
 import matplotlib.ticker as mticker
 from matplotlib.backends.backend_qt5agg import FigureCanvas
@@ -6,9 +7,8 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar,
 )
 from matplotlib.figure import Figure
-from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 from PySide6.QtCore import Signal
-
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 
 mpl.rcParams.update({"font.size": 14})
 

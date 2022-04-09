@@ -1,9 +1,6 @@
-from PySide6.QtWidgets import QVBoxLayout, QWidget, QTabWidget
-from PyroPara.gui.plot.plot_widget import (
-    TgPlot,
-    DtgPlot,
-    DdtgPlot,
-)
+from PySide6.QtWidgets import QTabWidget, QVBoxLayout, QWidget
+
+from PyroPara.gui.plot.plot_widget import DdtgPlot, DtgPlot, TgPlot
 
 
 class TabWidget(QTabWidget):

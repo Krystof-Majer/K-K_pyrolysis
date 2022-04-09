@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 
 from PyroPara.analysis import get_beta
-from PyroPara.filter import FILTERS
+from PyroPara.filter import HANNING
 from PyroPara.stafile import STAfile
 
 PATH_30 = "tests/fixtures/PYRO_MDF_30_900_N2_30Kmin_recal_02.txt"
@@ -13,7 +13,7 @@ PATH_30_PROCESSED = "tests/fixtures/processed_file_30K_MDF.txt"
 @pytest.fixture
 def sta_file():
     beta = get_beta(PATH_30)
-    file = STAfile(path=PATH_30, beta=beta, filter=FILTERS[30])
+    file = STAfile(path=PATH_30, beta=beta, filter=HANNING[30])
     file.load()
     file.process()
     file.calculate_local_minima(minorder=4)

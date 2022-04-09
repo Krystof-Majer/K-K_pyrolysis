@@ -1,5 +1,5 @@
 import os
-import matplotlib.pyplot as plt
+
 import numpy as np
 import pandas as pd
 from scipy.signal import argrelextrema
@@ -13,7 +13,7 @@ class STAfile:
     ) -> None:
         self._df: pd.DataFrame = None
         self.is_processed = False
-        self.filter = filter
+        self._filter = filter
         self.path = path
         self.beta = beta
         self.name = os.path.basename(path)
@@ -45,14 +45,14 @@ class STAfile:
             Filter (Class): instance of Filter class
         """
         # 1. TG
-        self._df["mass_filtered"] = self.filter.apply(
+        self._df["mass_filtered"] = self._filter.apply(
             self._df.time, self._df.mass
         )
         # 2. DTG
         self._df["mass_diff_unfiltered"] = -np.gradient(
             self._df.mass_filtered, self._df.time
         )
-        self._df["mass_diff_filtered"] = self.filter.apply(
+        self._df["mass_diff_filtered"] = self._filter.apply(
             self._df.time, self._df.mass_diff_unfiltered
         )
         # 3. DDTG
@@ -60,7 +60,7 @@ class STAfile:
             np.gradient(self._df.mass_diff_filtered, self._df.time)
         )
         self._df["mass_diff2_filtered"] = abs(
-            self.filter.apply(self._df.time, self._df.mass_diff2_unfiltered)
+            self._filter.apply(self._df.time, self._df.mass_diff2_unfiltered)
         )
 
         self.is_processed = True
@@ -133,40 +133,10 @@ class STAfile:
 
         return points
 
-    def plot(self):
+    @property
+    def filter(self):
+        return self._filter
 
-        y_filtered = self._df.mass_filterd
-        x = self._df.temperature
-        y = self._df.mass_unfiltered
-
-        plt.figure()
-        plt.plot(x, y_filtered, "-")
-        plt.plot(
-            x,
-            y,
-            "r",
-            alpha=0.3,
-        )
-        plt.plot(x, y_filtered, "-")
-        plt.plot(
-            x,
-            y,
-            "r",
-            alpha=0.3,
-        )
-        plt.plot(x, y_filtered, "-")
-        plt.title(f"{self.path}")
-        plt.set_xlabel("Temperature (K)")
-        plt.set_ylabel("MSL (0-1))")
-
-        # Plot of local minima points/lines #
-        temperature, mass = np.array(self.local_minima).T
-        plt.plot(temperature, mass, "kx")
-        plt.vlines(
-            temperature,
-            0,
-            max(y),
-            "k",
-            alpha=0.7,
-        )
-        plt.legend()
+    @filter.setter
+    def filter(self, filter: Filter):
+        self._filter = filter
