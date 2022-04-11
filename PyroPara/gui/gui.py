@@ -31,6 +31,7 @@ class Gui:
             self.remove_plot
         )
         controls.plot_button.clicked.connect(self.plot_clicked)
+        controls.plot_minima_button.clicked.connect(self.plot_minima_clicked)
 
     def open_clicked(self) -> None:
         dir = ReadDialog(self.main_window).show()
@@ -53,6 +54,9 @@ class Gui:
 
         if file_names:
             button.set_button_enabled(button.plot_button, is_enabled=True)
+            button.set_button_enabled(
+                button.plot_minima_button, is_enabled=True
+            )
             return
 
     def plot_clicked(self):
@@ -69,6 +73,19 @@ class Gui:
 
         for widget in plot_panel.widgets:
             widget.is_enabled = True
+
+    def plot_minima_clicked(self):
+        analysis = self.analysis
+        analysis.run()
+        self.plot_clicked()
+
+        selected_indices = self.left_panel.sta_files_widget.selected_indices
+        selected_files = [
+            self.analysis.sta_files[index] for index in selected_indices
+        ]
+
+        plot_panel = self.plot_panel
+        plot_panel.ddtg_plot.plot_minima(selected_files)
 
     # Incomplete
     def remove_plot(self):

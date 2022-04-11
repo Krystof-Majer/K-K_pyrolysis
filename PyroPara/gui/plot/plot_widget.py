@@ -76,3 +76,11 @@ class DdtgPlot(PlotWidget, TabStatus):
             super().plot(x, y, clear=False, legend=True, label=label)
         super().set_axis_labels()
         self.draw()
+
+    def plot_minima(self, files: list) -> None:
+        for file in files:
+            points = file.local_minima
+            _max = 0.8
+            x, y = zip(*points)
+            super().plot_minima(x, _max)
+        self.draw()

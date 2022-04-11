@@ -18,15 +18,17 @@ class ControlButtons(QWidget):
         self.buttons_layout: QHBoxLayout = QHBoxLayout()
         self.buttons_layout.addItem(spacer)
 
-        self.plot_button = QPushButton("PLOT")
+        self.plot_button = QPushButton("Plot")
         self.plot_button.setFont(FONT)
-        # self.plot_button.resize(20, 20)
-        self.test_button = QPushButton("test")
 
-        # self.buttons_layout.addWidget(self.test_button)
+        self.plot_minima_button = QPushButton("Calculate minima")
+        self.plot_minima_button.setFont(FONT)
+
+        self.buttons_layout.addWidget(self.plot_minima_button)
         self.buttons_layout.addWidget(self.plot_button)
 
         self.set_button_enabled(self.plot_button, is_enabled=False)
+        self.set_button_enabled(self.plot_minima_button, is_enabled=False)
 
     def set_button_enabled(self, button, *, is_enabled=True) -> None:
         button.setEnabled(is_enabled)

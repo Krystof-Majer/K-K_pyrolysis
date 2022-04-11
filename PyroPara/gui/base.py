@@ -119,6 +119,9 @@ class PlotWidget(QWidget):
     def set_axis_off(self) -> None:
         self.axis.set_axis_off()
 
+    def plot_minima(self, x, _max):
+        self.axis.vlines(x, 0, _max, "k", alpha=0.3)
+
     def plot(
         self,
         *args: Any,
