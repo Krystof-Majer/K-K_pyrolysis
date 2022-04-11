@@ -2,11 +2,10 @@ from os.path import join
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
-from PySide6.QtWidgets import QGridLayout, QMainWindow, QWidget
+from PySide6.QtWidgets import QMainWindow, QSplitter
 
 from PyroPara import BASE_DIR, __version__
-from PyroPara.gui.controls.control_buttons_widget import ControlButtons
-from PyroPara.gui.controls.file_select_widget import FileSelectWidget
+from PyroPara.gui.controls.left_panel import LeftPanel
 from PyroPara.gui.plot.plot_panel import PlotPanel
 
 
@@ -15,14 +14,13 @@ def get_icon(name):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, *, plot_panel: PlotPanel = None) -> None:
+    def __init__(
+        self, *, plot_panel: PlotPanel = None, left_panel: LeftPanel = None
+    ) -> None:
         super().__init__()
         self.plot_panel = plot_panel
-        self.main_widget: QWidget = QWidget()
-        self.main_layout: QGridLayout = QGridLayout()
-
-        self.sta_files_widget: FileSelectWidget = FileSelectWidget()
-        self.control_buttons_widget: ControlButtons = ControlButtons()
+        self.left_panel = left_panel
+        self.main_widget: QSplitter = QSplitter(Qt.Horizontal)
 
         self.menu_bar = self.menuBar()
         self.read_menu_action: QAction
@@ -32,17 +30,14 @@ class MainWindow(QMainWindow):
     def setup_ui(self) -> None:
         self.setWindowTitle(f"PyroPara {__version__}")
         self.resize(1024, 768)
-        self.main_widget.setLayout(self.main_layout)
         self.setCentralWidget(self.main_widget)
+        self.main_widget.setChildrenCollapsible(False)
 
-        self.main_layout.addWidget(self.sta_files_widget, 0, 0)
-        self.main_layout.addLayout(
-            self.control_buttons_widget.buttons_layout, 1, 0
-        )
-        self.main_layout.addWidget(self.plot_panel, 0, 1)
+        self.main_widget.addWidget(self.left_panel)
+        self.main_widget.addWidget(self.plot_panel)
 
-        self.main_layout.setColumnStretch(0, 1)
-        self.main_layout.setColumnStretch(1, 6)
+        self.main_widget.setStretchFactor(0, 1)
+        self.main_widget.setStretchFactor(1, 7)
 
         self.create_menus()
 

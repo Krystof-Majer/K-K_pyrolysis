@@ -1,4 +1,5 @@
 from PyroPara.analysis import Analysis
+from PyroPara.gui.controls.left_panel import LeftPanel
 from PyroPara.gui.dialogs import ReadDialog
 from PyroPara.gui.plot.plot_panel import PlotPanel
 from PyroPara.gui.windows import MainWindow
@@ -9,9 +10,12 @@ class Gui:
         super().__init__()
 
         self.plot_panel = PlotPanel()
-        self.main_window = MainWindow(plot_panel=self.plot_panel)
+        self.left_panel = LeftPanel()
+        self.main_window = MainWindow(
+            plot_panel=self.plot_panel, left_panel=self.left_panel
+        )
         self.analysis = Analysis()
-        self.control_buttons = self.main_window.control_buttons_widget
+        self.control_buttons = self.left_panel.control_buttons_widget
         self.connect_signals()
 
     def show(self) -> None:
@@ -20,9 +24,10 @@ class Gui:
     def connect_signals(self) -> None:
         window = self.main_window
         controls = self.control_buttons
+        left_panel = self.main_window.left_panel
 
         window.read_menu_action.triggered.connect(self.open_clicked)
-        window.sta_files_widget.delete_selection_button.clicked.connect(
+        left_panel.sta_files_widget.delete_selection_button.clicked.connect(
             self.remove_plot
         )
         controls.plot_button.clicked.connect(self.plot_clicked)
@@ -38,20 +43,20 @@ class Gui:
         analysis.load_all_files(dir)
         analysis.run()
 
-        self.main_window.sta_files_widget.clear()
+        self.left_panel.sta_files_widget.clear()
 
         file_names = [
             sta_file.name
             for sta_file in sorted(analysis.sta_files, key=lambda x: x.beta)
         ]
-        self.main_window.sta_files_widget.add_files(file_names)
+        self.left_panel.sta_files_widget.add_files(file_names)
 
         if file_names:
             button.set_button_enabled(button.plot_button, is_enabled=True)
             return
 
     def plot_clicked(self):
-        selected_indices = self.main_window.sta_files_widget.selected_indices
+        selected_indices = self.left_panel.sta_files_widget.selected_indices
         selected_files = [
             self.analysis.sta_files[index] for index in selected_indices
         ]

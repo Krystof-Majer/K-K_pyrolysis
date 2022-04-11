@@ -14,17 +14,17 @@ class ControlButtons(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        spacer = QSpacerItem(0, 0, QSizePolicy.MinimumExpanding)
+        spacer = QSpacerItem(0, 0, QSizePolicy.Expanding)
         self.buttons_layout: QHBoxLayout = QHBoxLayout()
         self.buttons_layout.addItem(spacer)
 
         self.plot_button = QPushButton("PLOT")
         self.plot_button.setFont(FONT)
-        self.plot_button.resize(40, 30)
-        # self.test_button = QPushButton("test")
+        # self.plot_button.resize(20, 20)
+        self.test_button = QPushButton("test")
 
-        self.buttons_layout.addWidget(self.plot_button)
         # self.buttons_layout.addWidget(self.test_button)
+        self.buttons_layout.addWidget(self.plot_button)
 
         self.set_button_enabled(self.plot_button, is_enabled=False)
 

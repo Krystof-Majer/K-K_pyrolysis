@@ -7,8 +7,6 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QListWidget,
     QPushButton,
-    QSizePolicy,
-    QSpacerItem,
     QVBoxLayout,
     QWidget,
 )
@@ -34,31 +32,32 @@ class FileSelectWidget(QWidget):
         vertical_layout.addWidget(button_group)
 
         self.button_layout: QHBoxLayout = QHBoxLayout(button_group)
-        self.button_layout.addItem(QSpacerItem(100, 20, QSizePolicy.Fixed))
+        # self.button_layout.addItem(QSpacerItem(80, 10, QSizePolicy.Fixed))
+        self.button_layout.setContentsMargins(60, 2, 5, 2)
 
         self.create_buttons()
 
     def create_buttons(self) -> None:
         self.delete_selection_button = QPushButton("◻")
         self.delete_selection_button.setToolTip("Delete selected")
-        self.delete_selection_button.setFixedSize(20, 20)
+        self.delete_selection_button.setFixedSize(30, 30)
         self.delete_selection_button.clicked.connect(
             self.delete_selection_clicked
         )
 
         deselect_all_button = QPushButton("☒")
         deselect_all_button.setToolTip("Deselect all")
-        deselect_all_button.setFixedSize(20, 20)
+        deselect_all_button.setFixedSize(30, 30)
         deselect_all_button.clicked.connect(self.deselect_all_clicked)
 
         select_all_button = QPushButton("◼")
         select_all_button.setToolTip("Select all")
-        select_all_button.setFixedSize(20, 20)
+        select_all_button.setFixedSize(30, 30)
         select_all_button.clicked.connect(self.select_all_clicked)
 
         invert_button = QPushButton("◩")
         invert_button.setToolTip("Invert selected")
-        invert_button.setFixedSize(20, 20)
+        invert_button.setFixedSize(30, 30)
         invert_button.clicked.connect(self.invert_clicked)
 
         self.button_layout.addWidget(select_all_button)
