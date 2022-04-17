@@ -1,3 +1,4 @@
+from itertools import count
 from typing import Any
 
 import matplotlib as mpl
@@ -7,6 +8,7 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar,
 )
 from matplotlib.figure import Figure
+from matplotlib import cm
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 
@@ -84,6 +86,14 @@ class PlotWidget(QWidget):
 
         return text
 
+    @property
+    def colors(self):
+        lines = self.axis.get_lines()
+        colors = []
+        for i, line in enumerate(lines):
+            colors.append(lines[i].get_c())
+        return colors
+
     def draw(self) -> None:
         self.canvas.draw()
 
@@ -119,8 +129,8 @@ class PlotWidget(QWidget):
     def set_axis_off(self) -> None:
         self.axis.set_axis_off()
 
-    def plot_minima(self, x, _max):
-        self.axis.vlines(x, 0, _max, "k", alpha=0.3)
+    def plot_minima(self, x, _max, color):
+        self.axis.vlines(x, 0, _max, color=color, alpha=0.3)
 
     def plot(
         self,

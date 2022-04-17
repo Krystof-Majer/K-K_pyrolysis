@@ -24,6 +24,10 @@ class TgPlot(PlotWidget, TabStatus):
             super().set_ylim(0, 1.05)
         self.draw()
 
+    def remove(self, files: list) -> None:
+        for file in files:
+            pass
+
 
 class DtgPlot(PlotWidget, TabStatus):
 
@@ -78,9 +82,11 @@ class DdtgPlot(PlotWidget, TabStatus):
         self.draw()
 
     def plot_minima(self, files: list) -> None:
-        for file in files:
+        color_list: list = super().colors
+
+        for i, file in enumerate(files):
+            _max = super().ylim[1]
             points = file.local_minima
-            _max = 0.8
             x, y = zip(*points)
-            super().plot_minima(x, _max)
+            super().plot_minima(x, _max, color=color_list[i])
         self.draw()

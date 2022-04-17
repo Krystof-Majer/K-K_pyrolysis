@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-FONT = QFont("Times", 10, QFont.Bold)
+FONT = QFont("Times", 10)
 
 
 class ControlButtons(QWidget):
@@ -21,8 +21,9 @@ class ControlButtons(QWidget):
         self.plot_button = QPushButton("Plot")
         self.plot_button.setFont(FONT)
 
-        self.plot_minima_button = QPushButton("Calculate minima")
+        self.plot_minima_button = QPushButton("Plot minima")
         self.plot_minima_button.setFont(FONT)
+        self.plot_minima_button.setCheckable(True)
 
         self.buttons_layout.addWidget(self.plot_minima_button)
         self.buttons_layout.addWidget(self.plot_button)

@@ -27,11 +27,11 @@ class Gui:
         left_panel = self.main_window.left_panel
 
         window.read_menu_action.triggered.connect(self.open_clicked)
-        left_panel.sta_files_widget.delete_selection_button.clicked.connect(
-            self.remove_plot
-        )
+
         controls.plot_button.clicked.connect(self.plot_clicked)
         controls.plot_minima_button.clicked.connect(self.plot_minima_clicked)
+        left_panel.sta_files_widget.delete_selection_button.clicked.connect
+        (self.remove_plot_clicked)
 
     def open_clicked(self) -> None:
         dir = ReadDialog(self.main_window).show()
@@ -46,10 +46,10 @@ class Gui:
 
         self.left_panel.sta_files_widget.clear()
 
-        file_names = [
-            sta_file.name
-            for sta_file in sorted(analysis.sta_files, key=lambda x: x.beta)
-        ]
+        analysis.sta_files.sort(key=lambda x: x.beta)
+
+        file_names = [sta_file.name for sta_file in analysis.sta_files]
+
         self.left_panel.sta_files_widget.add_files(file_names)
 
         if file_names:
@@ -87,6 +87,10 @@ class Gui:
         plot_panel = self.plot_panel
         plot_panel.ddtg_plot.plot_minima(selected_files)
 
-    # Incomplete
-    def remove_plot(self):
-        pass
+    def remove_plot_clicked(self):
+        selected_indices = self.left_panel.sta_files_widget.selected_indices
+        selected_files = [
+            self.analysis.sta_files[index] for index in selected_indices
+        ]
+
+        plot_panel = self.plot_panel

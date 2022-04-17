@@ -36,8 +36,8 @@ class MainWindow(QMainWindow):
         self.main_widget.addWidget(self.left_panel)
         self.main_widget.addWidget(self.plot_panel)
 
-        self.main_widget.setStretchFactor(0, 1)
-        self.main_widget.setStretchFactor(1, 7)
+        self.main_widget.setStretchFactor(0, 3)
+        self.main_widget.setStretchFactor(1, 6.5)
 
         self.create_menus()
 
@@ -53,6 +53,6 @@ class MainWindow(QMainWindow):
         self.read_menu_action = QAction(
             get_icon("open"), "Read STA files...", self
         )
-        self.read_menu_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_R))
+        self.read_menu_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
 
         file_menu.addAction(self.read_menu_action)
