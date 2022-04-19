@@ -1,4 +1,5 @@
 from itertools import count
+from pdb import line_prefix
 from typing import Any
 
 import matplotlib as mpl
@@ -102,6 +103,11 @@ class PlotWidget(QWidget):
         self.set_axis_labels()
         self.draw()
 
+    def toggle_line(self, enable: bool, line):
+        print(line)
+        line.set_visible(enable)
+        self.draw()
+
     def grid(self, **kwargs: Any) -> None:
         self.axis.grid(**kwargs)
 
@@ -130,7 +136,8 @@ class PlotWidget(QWidget):
         self.axis.set_axis_off()
 
     def plot_minima(self, x, _max, color):
-        self.axis.vlines(x, 0, _max, color=color, alpha=0.3)
+        line = self.axis.vlines(x, 0, _max, color=color, alpha=0.3)
+        return line
 
     def plot(
         self,

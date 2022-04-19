@@ -27,11 +27,9 @@ class Gui:
         left_panel = self.main_window.left_panel
 
         window.read_menu_action.triggered.connect(self.open_clicked)
-
+        window.delete_selection.triggered.connect(self.delete_selection)
         controls.plot_button.clicked.connect(self.plot_clicked)
-        controls.plot_minima_button.clicked.connect(self.plot_minima_clicked)
-        left_panel.sta_files_widget.delete_selection_button.clicked.connect
-        (self.remove_plot_clicked)
+        controls.show_minima_button.clicked.connect(self.show_minima_toggle)
 
     def open_clicked(self) -> None:
         dir = ReadDialog(self.main_window).show()
@@ -54,10 +52,6 @@ class Gui:
 
         if file_names:
             button.set_button_enabled(button.plot_button, is_enabled=True)
-            button.set_button_enabled(
-                button.plot_minima_button, is_enabled=True
-            )
-            return
 
     def plot_clicked(self):
         selected_indices = self.left_panel.sta_files_widget.selected_indices
@@ -70,27 +64,19 @@ class Gui:
         plot_panel.tg_plot.plot(selected_files)
         plot_panel.dtg_plot.plot(selected_files)
         plot_panel.ddtg_plot.plot(selected_files)
+        plot_panel.ddtg_plot.plot_minima(selected_files)
+        self.show_minima_toggle(False)
 
         for widget in plot_panel.widgets:
             widget.is_enabled = True
 
-    def plot_minima_clicked(self):
-        analysis = self.analysis
-        analysis.run()
-        self.plot_clicked()
+        button = self.control_buttons
+        button.set_button_enabled(button.show_minima_button, is_enabled=True)
 
-        selected_indices = self.left_panel.sta_files_widget.selected_indices
-        selected_files = [
-            self.analysis.sta_files[index] for index in selected_indices
-        ]
+    def delete_selection(self):
+        self.left_panel.sta_files_widget.delete_selection_clicked()
 
-        plot_panel = self.plot_panel
-        plot_panel.ddtg_plot.plot_minima(selected_files)
-
-    def remove_plot_clicked(self):
-        selected_indices = self.left_panel.sta_files_widget.selected_indices
-        selected_files = [
-            self.analysis.sta_files[index] for index in selected_indices
-        ]
-
-        plot_panel = self.plot_panel
+    def show_minima_toggle(self, checked: bool):
+        button = self.control_buttons
+        button.show_minima_checked = checked
+        self.plot_panel.ddtg_plot.toggle_lines(checked)

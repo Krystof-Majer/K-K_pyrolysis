@@ -24,6 +24,7 @@ class MainWindow(QMainWindow):
 
         self.menu_bar = self.menuBar()
         self.read_menu_action: QAction
+        self.delete_selection: QAction
 
         self.setup_ui()
 
@@ -40,9 +41,13 @@ class MainWindow(QMainWindow):
         self.main_widget.setStretchFactor(1, 6.5)
 
         self.create_menus()
+        self.create_shortcuts()
 
     def create_menus(self) -> None:
         self.create_file_menu()
+
+    def create_shortcuts(self) -> None:
+        self.create_delete_selection_shortcut()
 
     def get_icon(name):
         return QIcon(join(BASE_DIR, f"gui/icons/{name}.png"))
@@ -56,3 +61,8 @@ class MainWindow(QMainWindow):
         self.read_menu_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
 
         file_menu.addAction(self.read_menu_action)
+
+    def create_delete_selection_shortcut(self) -> None:
+        self.delete_selection = QAction(self)
+        self.delete_selection.setShortcut(QKeySequence(Qt.Key_Delete))
+        self.left_panel.sta_files_widget.addAction(self.delete_selection)

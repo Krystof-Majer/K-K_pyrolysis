@@ -67,6 +67,7 @@ class DdtgPlot(PlotWidget, TabStatus):
 
     def __init__(self, index) -> None:
         super().__init__(index)
+        self.minima_lines = []
 
     @property
     def tab_label(self) -> str:
@@ -83,10 +84,18 @@ class DdtgPlot(PlotWidget, TabStatus):
 
     def plot_minima(self, files: list) -> None:
         color_list: list = super().colors
+        self.minima_lines.clear()
 
         for i, file in enumerate(files):
             _max = super().ylim[1]
             points = file.local_minima
             x, y = zip(*points)
-            super().plot_minima(x, _max, color=color_list[i])
+            self.minima_lines.append(
+                super().plot_minima(x, _max, color=color_list[i])
+            )
+        print(self.minima_lines)
         self.draw()
+
+    def toggle_lines(self, enable: bool):
+        for line in self.minima_lines:
+            super().toggle_line(enable, line)

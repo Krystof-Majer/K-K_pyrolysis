@@ -68,7 +68,7 @@ class FileSelectWidget(QWidget):
         self.button_layout.addWidget(select_all_button)
         self.button_layout.addWidget(invert_button)
         self.button_layout.addWidget(deselect_all_button)
-        self.button_layout.addWidget(self.delete_selection_button)
+        # self.button_layout.addWidget(self.delete_selection_button)
 
     @property
     def selected_indices(self) -> List[int]:
