@@ -78,4 +78,5 @@ class Gui:
     def show_minima_toggle(self, checked: bool):
         button = self.control_buttons
         button.show_minima_checked = checked
+        button.change_show_minima_text()
         self.plot_panel.ddtg_plot.toggle_lines(checked)

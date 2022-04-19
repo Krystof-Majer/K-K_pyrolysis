@@ -43,13 +43,6 @@ class FileSelectWidget(QWidget):
         self.create_buttons()
 
     def create_buttons(self) -> None:
-        self.delete_selection_button = QPushButton("◻")
-        self.delete_selection_button.setToolTip("Delete selected")
-        self.delete_selection_button.setFixedSize(18, 18)
-        self.delete_selection_button.clicked.connect(
-            self.delete_selection_clicked
-        )
-
         deselect_all_button = QPushButton("☒")
         deselect_all_button.setToolTip("Deselect all")
         deselect_all_button.setFixedSize(18, 18)
@@ -68,7 +61,6 @@ class FileSelectWidget(QWidget):
         self.button_layout.addWidget(select_all_button)
         self.button_layout.addWidget(invert_button)
         self.button_layout.addWidget(deselect_all_button)
-        # self.button_layout.addWidget(self.delete_selection_button)
 
     @property
     def selected_indices(self) -> List[int]:

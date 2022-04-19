@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-FONT = QFont("Times", 10)
+FONT = QFont("Times", 10.5)
 
 
 class ControlButtons(QWidget):
@@ -20,12 +20,15 @@ class ControlButtons(QWidget):
 
         self.plot_button = QPushButton("Plot")
         self.plot_button.setFont(FONT)
+        self.plot_button.setFixedSize(90, 30)
 
-        self.show_minima_button = QPushButton("Show minima")
+        self.show_minima_button = QPushButton()
         self.show_minima_button.setFont(FONT)
+        self.show_minima_button.setFixedSize(90, 30)
         self.show_minima_checked = False
         self.show_minima_button.setCheckable(True)
         self.show_minima_button.setChecked(self.show_minima_checked)
+        self.change_show_minima_text()
 
         self.buttons_layout.addWidget(self.show_minima_button)
         self.buttons_layout.addWidget(self.plot_button)
@@ -35,3 +38,9 @@ class ControlButtons(QWidget):
 
     def set_button_enabled(self, button, *, is_enabled=True) -> None:
         button.setEnabled(is_enabled)
+
+    def change_show_minima_text(self):
+        if self.show_minima_checked:
+            self.show_minima_button.setText("Hide minima")
+        else:
+            self.show_minima_button.setText("Show minima")
