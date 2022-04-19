@@ -1,5 +1,3 @@
-from itertools import count
-from pdb import line_prefix
 from typing import Any
 
 import matplotlib as mpl
@@ -9,7 +7,6 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar,
 )
 from matplotlib.figure import Figure
-from matplotlib import cm
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 

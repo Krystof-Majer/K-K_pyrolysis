@@ -24,7 +24,6 @@ class Gui:
     def connect_signals(self) -> None:
         window = self.main_window
         controls = self.control_buttons
-        left_panel = self.main_window.left_panel
 
         window.read_menu_action.triggered.connect(self.open_clicked)
         window.delete_selection.triggered.connect(self.delete_selection)

@@ -93,7 +93,6 @@ class DdtgPlot(PlotWidget, TabStatus):
             self.minima_lines.append(
                 super().plot_minima(x, _max, color=color_list[i])
             )
-        print(self.minima_lines)
         self.draw()
 
     def toggle_lines(self, enable: bool):

@@ -1,5 +1,5 @@
 from typing import List
-from PySide6.QtGui import QShortcut
+
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QFrame,
@@ -7,10 +7,10 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QListWidget,
     QPushButton,
+    QSizePolicy,
+    QSpacerItem,
     QVBoxLayout,
     QWidget,
-    QSpacerItem,
-    QSizePolicy,
 )
 
 
