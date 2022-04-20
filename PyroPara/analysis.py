@@ -45,8 +45,8 @@ class Analysis:
 
             self.sta_files.append(file)
 
-    def load_file(self, path: str, filter: Filter = None):
-        """Loads single file from directory and assigns given filter.
+    def load_file(self, path: str):
+        """Loads single file from directory.
 
         Args:
             path (str): File path
@@ -56,8 +56,7 @@ class Analysis:
         self._default_filter = HANNING
 
         beta = get_beta(path)
-        if filter is None:
-            default_filter = self._default_filter.get(beta)
+        default_filter = self._default_filter.get(beta)
         file = STAfile(path=path, beta=beta, filter=default_filter)
         file.load()
 

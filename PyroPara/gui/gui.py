@@ -31,14 +31,16 @@ class Gui:
         controls.show_minima_button.clicked.connect(self.show_minima_toggle)
 
     def open_clicked(self) -> None:
-        dir = ReadDialog(self.main_window).show()
+        files = ReadDialog(self.main_window).show()
         button = self.control_buttons
 
-        if not dir:
+        if not files:
             return
 
         analysis = self.analysis
-        analysis.load_all_files(dir)
+        for file in files[0]:
+            analysis.load_file(file)
+
         analysis.run()
 
         self.left_panel.sta_files_widget.clear()

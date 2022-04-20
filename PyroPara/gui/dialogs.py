@@ -8,11 +8,13 @@ class ReadDialog(QFileDialog):
         super().__init__(parent)
 
     def show(self) -> str:
-        dir = self.getExistingDirectory(
+        files = self.getOpenFileNames(
             self.parent(),
             "Read STA files",
             expanduser("~"),
-            self.ShowDirsOnly | self.DontResolveSymlinks,
+            "Text files (*.txt)",
+            "",
+            self.DontResolveSymlinks,
         )
 
-        return dir
+        return files
