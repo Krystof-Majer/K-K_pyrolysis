@@ -30,13 +30,14 @@ class MainWindow(QMainWindow):
 
     def setup_ui(self) -> None:
         self.setWindowTitle(f"PyroPara {__version__}")
-        self.resize(1024, 768)
+        self.resize(1920, 1080)
         self.setCentralWidget(self.main_widget)
         self.main_widget.setChildrenCollapsible(False)
 
         self.main_widget.addWidget(self.left_panel)
         self.main_widget.addWidget(self.plot_panel)
 
+        self.left_panel.setMaximumWidth(self.geometry().width() / 4)
         self.main_widget.setStretchFactor(0, 3)
         self.main_widget.setStretchFactor(1, 6.5)
 
