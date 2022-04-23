@@ -55,6 +55,7 @@ class Gui:
             button.set_button_enabled(button.plot_button, is_enabled=True)
 
     def plot_clicked(self):
+        button = self.control_buttons
         selected_indices = self.left_panel.sta_files_widget.selected_indices
         selected_files = [
             self.analysis.sta_files[index] for index in selected_indices
@@ -66,19 +67,24 @@ class Gui:
         plot_panel.dtg_plot.plot(selected_files)
         plot_panel.ddtg_plot.plot(selected_files)
         plot_panel.ddtg_plot.plot_minima(selected_files)
+
+        button.show_minima_button.setChecked(False)
         self.show_minima_toggle(False)
 
-        for widget in plot_panel.widgets:
-            widget.is_enabled = True
+        if selected_files:
+            for widget in plot_panel.widgets:
+                widget.is_enabled = True
 
-        button = self.control_buttons
-        button.set_button_enabled(button.show_minima_button, is_enabled=True)
+            button.set_button_enabled(
+                button.show_minima_button, is_enabled=True
+            )
 
     def delete_selection(self):
         self.left_panel.sta_files_widget.delete_selection_clicked()
 
     def show_minima_toggle(self, checked: bool):
         button = self.control_buttons
+        print(f"in gui toggle {checked}")
         button.show_minima_checked = checked
         button.change_show_minima_text()
         self.plot_panel.ddtg_plot.toggle_lines(checked)

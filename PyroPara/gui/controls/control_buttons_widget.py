@@ -36,7 +36,7 @@ class ControlButtons(QWidget):
         self.set_button_enabled(self.plot_button, is_enabled=False)
         self.set_button_enabled(self.show_minima_button, is_enabled=False)
 
-    def set_button_enabled(self, button, *, is_enabled=True) -> None:
+    def set_button_enabled(self, button, is_enabled=True) -> None:
         button.setEnabled(is_enabled)
 
     def change_show_minima_text(self):

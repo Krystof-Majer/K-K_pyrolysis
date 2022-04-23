@@ -101,6 +101,7 @@ class PlotWidget(QWidget):
         self.draw()
 
     def toggle_line(self, enable: bool, line):
+        print(f"in base toggle {enable}")
         line.set_visible(enable)
         self.draw()
 
