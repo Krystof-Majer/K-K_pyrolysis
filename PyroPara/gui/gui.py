@@ -1,6 +1,9 @@
+from os.path import basename
+
 from PyroPara.analysis import Analysis
 from PyroPara.gui.controls.left_panel import LeftPanel
 from PyroPara.gui.dialogs import ReadDialog
+from PyroPara.gui.message_box import warning
 from PyroPara.gui.plot.plot_panel import PlotPanel
 from PyroPara.gui.windows import MainWindow
 
@@ -37,16 +40,25 @@ class Gui:
         if not files:
             return
 
+        rejected_files = []
         analysis = self.analysis
         for file in files[0]:
-            analysis.load_file(file)
+            try:
+                analysis.load_file(file)
+            except rejected_files.append(basename(file)):
+                continue
+
+        if len(rejected_files) != 0:
+            warning(
+                text="Unable to load files",
+                info_text=f"Unsupported files\n {rejected_files}",
+            )
 
         analysis.run()
 
         self.left_panel.sta_files_widget.clear()
 
         analysis.sta_files.sort(key=lambda x: x.beta)
-
         file_names = [sta_file.name for sta_file in analysis.sta_files]
 
         self.left_panel.sta_files_widget.add_files(file_names)
@@ -84,7 +96,6 @@ class Gui:
 
     def show_minima_toggle(self, checked: bool):
         button = self.control_buttons
-        print(f"in gui toggle {checked}")
         button.show_minima_checked = checked
         button.change_show_minima_text()
         self.plot_panel.ddtg_plot.toggle_lines(checked)
