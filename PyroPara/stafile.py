@@ -1,9 +1,8 @@
 import os
-
 import numpy as np
 import pandas as pd
 from scipy.signal import argrelextrema
-
+from utils import normalize
 from PyroPara.filter import Filter
 
 
@@ -62,6 +61,10 @@ class STAfile:
         self._df["mass_diff2_filtered"] = abs(
             self._filter.apply(self._df.time, self._df.mass_diff2_unfiltered)
         )
+        # 4. DDTG normalized
+        self._df["mass_diff2_normalized"] = normalize(
+            self._df.mass_diff2_filtered
+        )
 
         self.is_processed = True
 
@@ -91,7 +94,6 @@ class STAfile:
         self.local_minima.clear()
         points = []
 
-        # counter  = 1
         while True:
             points = self.find_local_minima(minorder, min_temp, max_temp)
             if len(points) < 11 and len(points) > 0:

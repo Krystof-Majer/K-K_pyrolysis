@@ -1,4 +1,5 @@
 import re
+import numpy as np
 
 BETA_REGEX = re.compile(r"/(.+)\(K/min\)")
 R = 8.314
@@ -15,6 +16,10 @@ def get_beta(path) -> float:
                     return float(m.group(1))
 
     raise ValueError("Unable to read temperature step from " f"file: {file}")
+
+
+def normalize(data):
+    return (data - np.min(data)) / (np.max(data) - np.min(data))
 
 
 def calculate_ei():

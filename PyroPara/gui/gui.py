@@ -79,6 +79,8 @@ class Gui:
         plot_panel.dtg_plot.plot(selected_files)
         plot_panel.ddtg_plot.plot(selected_files)
         plot_panel.ddtg_plot.plot_minima(selected_files)
+        plot_panel.ddtg_plot_normalized.plot(selected_files)
+        plot_panel.ddtg_plot_normalized.plot_minima(selected_files)
 
         button.show_minima_button.setChecked(False)
         self.show_minima_toggle(False)
@@ -99,3 +101,4 @@ class Gui:
         button.show_minima_checked = checked
         button.change_show_minima_text()
         self.plot_panel.ddtg_plot.toggle_lines(checked)
+        self.plot_panel.ddtg_plot_normalized.toggle_lines(checked)

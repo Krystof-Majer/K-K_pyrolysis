@@ -1,6 +1,11 @@
 from PySide6.QtWidgets import QTabWidget, QVBoxLayout, QWidget
 
-from PyroPara.gui.plot.plot_widget import DdtgPlot, DtgPlot, TgPlot
+from PyroPara.gui.plot.plot_widget import (
+    DdtgPlot,
+    DtgPlot,
+    TgPlot,
+    DdtgPlotNormalized,
+)
 
 
 class TabWidget(QTabWidget):
@@ -26,8 +31,14 @@ class PlotPanel(QWidget):
         self.tg_plot: TgPlot = TgPlot(0)
         self.dtg_plot: DtgPlot = DtgPlot(1)
         self.ddtg_plot: DdtgPlot = DdtgPlot(2)
+        self.ddtg_plot_normalized: DdtgPlotNormalized = DdtgPlotNormalized(3)
 
-        self.widgets = (self.tg_plot, self.dtg_plot, self.ddtg_plot)
+        self.widgets = (
+            self.tg_plot,
+            self.dtg_plot,
+            self.ddtg_plot,
+            self.ddtg_plot_normalized,
+        )
         self.tab_widget: TabWidget = TabWidget(plotwidgets=self.widgets)
         main_layout.addWidget(self.tab_widget)
         self.connect_signals()

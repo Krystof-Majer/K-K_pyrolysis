@@ -38,6 +38,8 @@ class PlotWidget(QWidget):
     Y_LABEL = "y_label"
     X_UNIT = "unit"
     Y_UNIT = "unit"
+    Y_UNIT_N = "~"
+    Y_LABEL_N = "y_label"
 
     def __init__(self, order) -> None:
         super().__init__()
@@ -127,6 +129,10 @@ class PlotWidget(QWidget):
     def set_axis_labels(self) -> None:
         self.set_x_label(self.X_LABEL + " " + f"({self.X_UNIT})")
         self.set_y_label(self.Y_LABEL + " " + f"({self.Y_UNIT})")
+
+    def set_axis_labels_normalized(self) -> None:
+        self.set_x_label(self.X_LABEL + " " + f"({self.X_UNIT})")
+        self.set_y_label(self.Y_LABEL_N + " " + f"({self.Y_UNIT_N})")
 
     def set_axis_off(self) -> None:
         self.axis.set_axis_off()
