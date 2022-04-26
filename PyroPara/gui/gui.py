@@ -29,7 +29,6 @@ class Gui:
         controls = self.control_buttons
 
         window.read_menu_action.triggered.connect(self.open_clicked)
-        window.delete_selection.triggered.connect(self.delete_selection)
         controls.plot_button.clicked.connect(self.plot_clicked)
         controls.show_minima_button.clicked.connect(self.show_minima_toggle)
 
@@ -92,9 +91,6 @@ class Gui:
             button.set_button_enabled(
                 button.show_minima_button, is_enabled=True
             )
-
-    def delete_selection(self):
-        self.left_panel.sta_files_widget.delete_selection_clicked()
 
     def show_minima_toggle(self, checked: bool):
         button = self.control_buttons

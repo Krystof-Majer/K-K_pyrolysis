@@ -82,13 +82,6 @@ class FileSelectWidget(QWidget):
     def select_all_clicked(self) -> None:
         self.file_list.selectAll()
 
-    def delete_selection_clicked(self) -> None:
-        list_items = self.file_list.selectedItems()
-        if not list_items:
-            return
-        for item in list_items:
-            self.file_list.takeItem(self.file_list.row(item))
-
     def invert_clicked(self) -> None:
         for i in range(self.file_list.count()):
             file = self.file_list.item(i)
