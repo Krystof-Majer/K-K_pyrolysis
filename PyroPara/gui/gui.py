@@ -45,10 +45,10 @@ class Gui:
         for file in files[0]:
             try:
                 analysis.load_file(file)
-            except rejected_files.append(basename(file)):
-                continue
+            except:
+                rejected_files.append(basename(file))
 
-        if len(rejected_files) != 0:
+        if len(rejected_files) > 0:
             warning(
                 text="Unable to load files",
                 info_text=f"Unsupported files\n {rejected_files}",
