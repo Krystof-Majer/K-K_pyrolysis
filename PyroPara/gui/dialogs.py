@@ -11,10 +11,9 @@ class ReadDialog(QFileDialog):
         files = self.getOpenFileNames(
             self.parent(),
             "Read STA files",
-            expanduser("~"),
+            "",
             "Text files (*.txt)",
             "",
-            self.DontResolveSymlinks,
         )
 
         return files

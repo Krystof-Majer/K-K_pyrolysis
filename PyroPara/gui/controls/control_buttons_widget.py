@@ -28,7 +28,8 @@ class ControlButtons(QWidget):
         self.show_minima_checked = False
         self.show_minima_button.setCheckable(True)
         self.show_minima_button.setChecked(self.show_minima_checked)
-        self.change_show_minima_text()
+        self.show_minima_button.setText("Show minima")
+        self.change_show_minima_style()
 
         self.buttons_layout.addWidget(self.show_minima_button)
         self.buttons_layout.addWidget(self.plot_button)
@@ -39,8 +40,8 @@ class ControlButtons(QWidget):
     def set_button_enabled(self, button, is_enabled=True) -> None:
         button.setEnabled(is_enabled)
 
-    def change_show_minima_text(self):
+    def change_show_minima_style(self):
         if self.show_minima_checked:
-            self.show_minima_button.setText("Hide minima")
+            self.show_minima_button.setStyleSheet("background-color:#70cc54")
         else:
-            self.show_minima_button.setText("Show minima")
+            self.show_minima_button.setStyleSheet("background-color:#D3D3D3")

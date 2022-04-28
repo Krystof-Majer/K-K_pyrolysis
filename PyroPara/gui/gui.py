@@ -1,9 +1,9 @@
 from os.path import basename
-
+from filecmp import cmp
 from PyroPara.analysis import Analysis
 from PyroPara.gui.controls.left_panel import LeftPanel
 from PyroPara.gui.dialogs import ReadDialog
-from PyroPara.gui.message_box import warning
+from PyroPara.gui.message_box import warning_msg
 from PyroPara.gui.plot.plot_panel import PlotPanel
 from PyroPara.gui.windows import MainWindow
 
@@ -35,22 +35,59 @@ class Gui:
     def open_clicked(self) -> None:
         files = ReadDialog(self.main_window).show()
         button = self.control_buttons
+        analysis = self.analysis
 
         if not files:
             return
 
         rejected_files = []
-        analysis = self.analysis
-        for file in files[0]:
-            try:
-                analysis.load_file(file)
-            except:
-                rejected_files.append(basename(file))
+        duplicate_files = []
+        loaded_files = []
+
+        for sta_file in analysis.sta_files:
+            loaded_files.append(sta_file.path)
+
+        files_present = False
+        if len(loaded_files) > 0:
+            files_present = True
+
+        for file_new in files[0]:
+            if files_present:
+
+                if_duplicate = False
+
+                for file_old in loaded_files:
+
+                    if cmp(file_new, file_old):
+                        if_duplicate = True
+
+                if if_duplicate:
+                    duplicate_files.append(basename(file_new))
+                    continue
+
+                else:
+                    try:
+                        analysis.load_file(file_new)
+                    except:
+                        rejected_files.append(basename(file_new))
+            else:
+                try:
+                    analysis.load_file(file_new)
+                except:
+                    rejected_files.append(basename(file_new))
 
         if len(rejected_files) > 0:
-            warning(
-                text="Unable to load files",
-                info_text=f"Unsupported files\n {rejected_files}",
+            warning_msg(
+                text="Unsupported files error.",
+                info_text="Unable to load the following files:",
+                details="\n".join(map(str, rejected_files)),
+            )
+
+        if len(duplicate_files) > 0:
+            warning_msg(
+                text="Duplicate files error.",
+                info_text="Duplicate files found:",
+                details="\n".join(map(str, duplicate_files)),
             )
 
         analysis.run()
@@ -95,6 +132,6 @@ class Gui:
     def show_minima_toggle(self, checked: bool):
         button = self.control_buttons
         button.show_minima_checked = checked
-        button.change_show_minima_text()
+        button.change_show_minima_style()
         self.plot_panel.ddtg_plot.toggle_lines(checked)
         self.plot_panel.ddtg_plot_normalized.toggle_lines(checked)

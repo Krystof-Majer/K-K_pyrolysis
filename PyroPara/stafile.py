@@ -18,6 +18,14 @@ class STAfile:
         self.name = os.path.basename(path)
         self.local_minima: list = []
 
+    @property
+    def filter(self):
+        return self._filter
+
+    @filter.setter
+    def filter(self, filter: Filter):
+        self._filter = filter
+
     def load(self):
         """Load a STAfile data as pandas dataframe.
 
@@ -134,11 +142,3 @@ class STAfile:
                 points.append(tup)
 
         return points
-
-    @property
-    def filter(self):
-        return self._filter
-
-    @filter.setter
-    def filter(self, filter: Filter):
-        self._filter = filter
