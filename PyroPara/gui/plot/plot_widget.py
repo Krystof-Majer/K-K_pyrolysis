@@ -1,4 +1,3 @@
-from re import T
 from PyroPara.gui.base import PlotWidget, TabStatus
 
 

@@ -1,5 +1,3 @@
-from os.path import expanduser
-
 from PySide6.QtWidgets import QFileDialog, QMainWindow
 
 

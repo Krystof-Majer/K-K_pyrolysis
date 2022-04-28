@@ -1,5 +1,6 @@
-from os.path import basename
 from filecmp import cmp
+from os.path import basename
+
 from PyroPara.analysis import Analysis
 from PyroPara.gui.controls.left_panel import LeftPanel
 from PyroPara.gui.dialogs import ReadDialog
@@ -68,12 +69,12 @@ class Gui:
                 else:
                     try:
                         analysis.load_file(file_new)
-                    except:
+                    except Exception:
                         rejected_files.append(basename(file_new))
             else:
                 try:
                     analysis.load_file(file_new)
-                except:
+                except Exception:
                     rejected_files.append(basename(file_new))
 
         if len(rejected_files) > 0:

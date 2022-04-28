@@ -1,4 +1,5 @@
 import re
+
 import numpy as np
 
 BETA_REGEX = re.compile(r"/(.+)\(K/min\)")

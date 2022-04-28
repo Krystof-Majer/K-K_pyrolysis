@@ -1,9 +1,11 @@
 import os
+
 import numpy as np
 import pandas as pd
 from scipy.signal import argrelextrema
-from utils import normalize
+
 from PyroPara.filter import Filter
+from PyroPara.utils import normalize
 
 
 class STAfile:

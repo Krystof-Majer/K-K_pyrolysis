@@ -31,7 +31,7 @@ def test_is_loaded(sta_file):
 
 
 def test_is_complete(sta_file):
-    assert len(sta_file._df.columns) == 12
+    assert len(sta_file._df.columns) == 13
 
 
 def test_is_symmetrical(sta_file):

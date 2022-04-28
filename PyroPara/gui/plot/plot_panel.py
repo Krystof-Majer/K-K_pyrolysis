@@ -2,9 +2,9 @@ from PySide6.QtWidgets import QTabWidget, QVBoxLayout, QWidget
 
 from PyroPara.gui.plot.plot_widget import (
     DdtgPlot,
+    DdtgPlotNormalized,
     DtgPlot,
     TgPlot,
-    DdtgPlotNormalized,
 )
 
 
