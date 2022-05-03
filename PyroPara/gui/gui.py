@@ -5,6 +5,7 @@ from PyroPara.analysis import Analysis
 from PyroPara.gui.controls.left_panel import LeftPanel
 from PyroPara.gui.dialogs import ReadDialog
 from PyroPara.gui.message_box import warning_msg
+from PyroPara.gui.outputs.right_panel import RightPanel
 from PyroPara.gui.plot.plot_panel import PlotPanel
 from PyroPara.gui.windows import MainWindow
 
@@ -15,8 +16,11 @@ class Gui:
 
         self.plot_panel = PlotPanel()
         self.left_panel = LeftPanel()
+        self.right_panel = RightPanel()
         self.main_window = MainWindow(
-            plot_panel=self.plot_panel, left_panel=self.left_panel
+            plot_panel=self.plot_panel,
+            left_panel=self.left_panel,
+            right_panel=self.right_panel,
         )
         self.analysis = Analysis()
         self.control_buttons = self.left_panel.control_buttons_widget
@@ -37,6 +41,7 @@ class Gui:
         files = ReadDialog(self.main_window).show()
         button = self.control_buttons
         analysis = self.analysis
+        analysis.sta_files.clear()
 
         if not files:
             return

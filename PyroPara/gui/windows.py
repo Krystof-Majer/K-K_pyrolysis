@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QMainWindow, QSplitter
 
 from PyroPara import BASE_DIR, __version__
 from PyroPara.gui.controls.left_panel import LeftPanel
+from PyroPara.gui.outputs.right_panel import RightPanel
 from PyroPara.gui.plot.plot_panel import PlotPanel
 
 
@@ -15,11 +16,17 @@ def get_icon(name):
 
 class MainWindow(QMainWindow):
     def __init__(
-        self, *, plot_panel: PlotPanel = None, left_panel: LeftPanel = None
+        self,
+        *,
+        plot_panel: PlotPanel = None,
+        left_panel: LeftPanel = None,
+        right_panel: RightPanel = None,
     ) -> None:
+
         super().__init__()
         self.plot_panel = plot_panel
         self.left_panel = left_panel
+        self.right_panel = right_panel
         self.main_widget: QSplitter = QSplitter(Qt.Horizontal)
 
         self.menu_bar = self.menuBar()
@@ -35,10 +42,12 @@ class MainWindow(QMainWindow):
 
         self.main_widget.addWidget(self.left_panel)
         self.main_widget.addWidget(self.plot_panel)
+        self.main_widget.addWidget(self.right_panel)
 
         self.left_panel.setMaximumWidth(self.geometry().width() / 4)
         self.main_widget.setStretchFactor(0, 3)
         self.main_widget.setStretchFactor(1, 6.5)
+        self.main_widget.setStretchFactor(2, 1)
 
         self.create_menus()
         self.create_shortcuts()

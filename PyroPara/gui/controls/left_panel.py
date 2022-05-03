@@ -8,7 +8,7 @@ class LeftPanel(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        self.main_layout: QVBoxLayout = QVBoxLayout()
+        self.main_layout = QVBoxLayout()
         self.setLayout(self.main_layout)
 
         self.sta_files_widget: FileSelectWidget = FileSelectWidget()
