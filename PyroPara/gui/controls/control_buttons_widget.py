@@ -20,7 +20,8 @@ class ControlButtons(QWidget):
 
         self.plot_button = QPushButton("Plot")
         self.plot_button.setFont(FONT)
-        self.plot_button.setFixedSize(90, 30)
+        self.plot_button.setStyleSheet("background-color:#D3D3D3")
+        self.plot_button.setFixedSize(100, 30)
 
         self.show_minima_button = QPushButton()
         self.show_minima_button.setFont(FONT)

@@ -37,6 +37,7 @@ class Gui:
         files = ReadDialog(self.main_window).show()
         button = self.control_buttons
         analysis = self.analysis
+        analysis.sta_files.clear()
 
         if not files:
             return
