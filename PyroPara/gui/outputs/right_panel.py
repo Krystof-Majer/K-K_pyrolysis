@@ -1,22 +1,22 @@
-from PySide6.QtWidgets import QGroupBox, QTabWidget, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QVBoxLayout, QWidget
+
+from PyroPara.gui.outputs.minima_widget import MinimaWidget
 
 
 class RightPanel(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        minima_table_group = QGroupBox()
-        minima_table_group.setTitle("Local temperature minimas")
-
+        local_minima_widget: MinimaWidget = MinimaWidget()
         main_layout = QVBoxLayout(self)
-        main_layout.addWidget(minima_table_group)
+        main_layout.addWidget(local_minima_widget)
 
-        vertical_layout = QVBoxLayout(minima_table_group)
-
-        self.minima_tab = QTabWidget()
-        vertical_layout.addWidget(self.minima_tab)
-
-    def create_tabs(self, minima_widgets: list):
-        self.minima_tab.clear()
-        for widget in minima_widgets:
-            self.minima_tab.addTab(widget, widget.tab_label)
+        data = [
+            (1, 0, 0),
+            (3, 5, 0),
+            (3, 3, 2),
+            (7, 8, 9),
+            (4, 9, 2),
+        ]
+        local_minima_widget.create_table(data)
+        local_minima_widget.create_table(data)
