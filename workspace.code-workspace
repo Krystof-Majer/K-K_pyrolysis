@@ -18,6 +18,7 @@
     ],
     "[python]": {
       "editor.defaultFormatter": "ms-python.python"
-    }
+    },
+    "editor.bracketPairColorization.enabled": false
   }
 }
