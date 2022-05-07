@@ -1,6 +1,5 @@
-import re
-
-from PySide6.QtCore import QAbstractTableModel, Qt
+from PyroPara.gui.outputs.table_view_widget import Table, TableModel
+from PyroPara.utils import round_all
 from PySide6.QtWidgets import (
     QGroupBox,
     QHBoxLayout,
@@ -8,52 +7,41 @@ from PySide6.QtWidgets import (
     QTableView,
     QVBoxLayout,
     QWidget,
+    QSizePolicy,
+    QSpacerItem,
+    QFrame,
 )
-
-MATERIAL_REGEX = re.compile(r"_[A-Z]_")
-
-
-class TableModel(QAbstractTableModel):
-    def __init__(self, data):
-        super(TableModel, self).__init__()
-        self._data = data
-
-    def data(self, index, role):
-        if role == Qt.DisplayRole:
-            return self._data[index.row()][index.column()]
-
-    def rowCount(self, index):
-        return len(self._data)
-
-    def columnCount(self, index):
-        return len(self._data[0])
 
 
 class MinimaWidget(QWidget):
     def __init__(self) -> None:
         super().__init__()
+        self.table_list = []
 
-        self.minima_table_group = QGroupBox("Local temperature minimas")
-        self.main_layout = QVBoxLayout(self)
-        self.main_layout.addWidget(self.minima_table_group)
+        minima_table_group = QGroupBox("Local temperature minimas")
+        main_layout = QVBoxLayout(self)
+        main_layout.addWidget(minima_table_group)
+
+        self.setLayout(main_layout)
+
         self.table_layout = QHBoxLayout()
+        minima_table_group.setLayout(self.table_layout)
 
-        self.setLayout(self.main_layout)
-
-        self.minima_table_group.setLayout(self.table_layout)
-
+        button_group = QFrame(self)
+        main_layout.addWidget(button_group)
+        self.button_layout = QHBoxLayout(button_group)
+        self.button_layout.addItem(
+            QSpacerItem(10, 10, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        )
         mockup_button = QPushButton("mockup_section")
-        self.main_layout.addWidget(mockup_button)
+        self.button_layout.addWidget(mockup_button)
 
     def create_table(self, sta_file):
-        # type = re.search(MATERIAL_REGEX, sta_file.name)
-        # beta = sta_file.beta
-        # data = sta_file.local_minima
-        data = sta_file
+        table = Table(sta_file)
+        data = round_all(sta_file.local_minima)
 
-        # box = QGroupBox(f"{type} {beta}K")
-
-        self.table = QTableView()
         self.model = TableModel(data)
-        self.table.setModel(self.model)
-        self.table_layout.addWidget(self.table)
+        table.setModel(self.model)
+
+        self.table_layout.addWidget(table)
+        self.table_list.append(table)

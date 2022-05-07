@@ -7,9 +7,9 @@ class RightPanel(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        local_minima_widget: MinimaWidget = MinimaWidget()
+        self.minima_widget: MinimaWidget = MinimaWidget()
         main_layout = QVBoxLayout(self)
-        main_layout.addWidget(local_minima_widget)
+        main_layout.addWidget(self.minima_widget)
 
         data = [
             (1, 0, 0),
@@ -18,5 +18,6 @@ class RightPanel(QWidget):
             (7, 8, 9),
             (4, 9, 2),
         ]
-        local_minima_widget.create_table(data)
-        local_minima_widget.create_table(data)
+
+        # Test
+        # table = self.minima_widget.create_table(data)

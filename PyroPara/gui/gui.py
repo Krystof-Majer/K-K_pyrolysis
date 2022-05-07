@@ -124,6 +124,10 @@ class Gui:
         plot_panel.ddtg_plot_normalized.plot(selected_files)
         plot_panel.ddtg_plot_normalized.plot_minima(selected_files)
 
+        minima_widget = self.right_panel.minima_widget
+        for file in selected_files:
+            minima_widget.create_table(file)
+
         button.show_minima_button.setChecked(False)
         self.show_minima_toggle(False)
 
