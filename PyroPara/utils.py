@@ -23,7 +23,7 @@ def get_beta(path) -> float:
 def get_material(file_name):
     material = re.search(MATERIAL_REGEX, file_name)
     if material:
-        return str(material)
+        return str(material.group(0)[1:-1])
     else:
         raise ValueError("Unable to read material type")
 
