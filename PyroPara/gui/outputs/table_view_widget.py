@@ -18,6 +18,9 @@ class TableModel(QAbstractTableModel):
         if role == Qt.DisplayRole:
             return float(self._data[index.row()][index.column()])
 
+        if role == Qt.TextAlignmentRole:
+            return Qt.AlignVCenter + Qt.AlignHCenter
+
     def setHeaderData(self, section, orientation, data, role=Qt.EditRole):
         if orientation == Qt.Horizontal and role == Qt.EditRole:
             try:
@@ -40,8 +43,6 @@ class Table(QTableView):
     def __init__(self) -> None:
         super().__init__()
 
-        self.setColumnWidth(1, 20)
-        self.setColumnWidth(2, 20)
         self.resizeColumnsToContents()
         self.resizeRowsToContents()
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
