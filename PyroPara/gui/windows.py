@@ -45,6 +45,7 @@ class MainWindow(QMainWindow):
         self.main_widget.addWidget(self.right_panel)
 
         self.left_panel.setMaximumWidth(self.geometry().width() / 4)
+        self.right_panel.setMinimumWidth(self.geometry().width() / 7)
         self.main_widget.setStretchFactor(0, 3)
         self.main_widget.setStretchFactor(1, 6.5)
         self.main_widget.setStretchFactor(2, 1)

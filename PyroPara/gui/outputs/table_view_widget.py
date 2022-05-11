@@ -40,6 +40,8 @@ class Table(QTableView):
     def __init__(self) -> None:
         super().__init__()
 
+        self.setColumnWidth(1, 20)
+        self.setColumnWidth(2, 20)
         self.resizeColumnsToContents()
         self.resizeRowsToContents()
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)

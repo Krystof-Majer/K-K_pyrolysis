@@ -42,6 +42,7 @@ class Gui:
         button = self.control_buttons
         analysis = self.analysis
         analysis.sta_files.clear()
+        self.right_panel.minima_widget.tab_widget.clear()
 
         if not files:
             return
