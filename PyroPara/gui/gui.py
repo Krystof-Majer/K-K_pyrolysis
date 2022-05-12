@@ -39,18 +39,19 @@ class Gui:
 
     def open_clicked(self) -> None:
         files = ReadDialog(self.main_window).show()
-        button = self.control_buttons
         analysis = self.analysis
-        analysis.sta_files.clear()
-        self.right_panel.minima_widget.tab_widget.clear()
+        button = self.control_buttons
 
-        if not files:
+        if files is None:
             return
+
+        self.full_reset()
 
         rejected_files = []
         duplicate_files = []
         loaded_files = []
 
+        # Unused funcionality
         for sta_file in analysis.sta_files:
             loaded_files.append(sta_file.path)
 
@@ -99,7 +100,8 @@ class Gui:
 
         analysis.run()
 
-        self.left_panel.sta_files_widget.clear()
+        # Removes all existing files while loading
+        # self.left_panel.sta_files_widget.clear()
 
         analysis.sta_files.sort(key=lambda x: x.beta)
         file_names = [sta_file.name for sta_file in analysis.sta_files]
@@ -108,6 +110,9 @@ class Gui:
 
         if file_names:
             button.set_button_enabled(button.plot_button, is_enabled=True)
+            button.set_button_enabled(
+                button.show_minima_button, is_enabled=False
+            )
 
     def plot_clicked(self):
         button = self.control_buttons
@@ -147,3 +152,29 @@ class Gui:
         button.change_show_minima_style()
         self.plot_panel.ddtg_plot.toggle_lines(checked)
         self.plot_panel.ddtg_plot_normalized.toggle_lines(checked)
+
+    def reset_analysis(self):
+        analysis = self.analysis
+        analysis.sta_files.clear()
+
+    def reset_minima_toggle(self):
+        self.control_buttons.show_minima_button.setChecked(False)
+        self.show_minima_toggle(False)
+
+    def reset_plot_panel(self):
+        self.plot_panel.clear_widgets(self.plot_panel.widgets)
+        for widget in self.plot_panel.widgets[1:]:
+            widget.is_enabled = False
+
+    def reset_right_panel(self):
+        self.right_panel.minima_widget.tab_widget.clear()
+
+    def reset_left_panel(self):
+        self.left_panel.sta_files_widget.clear()
+
+    def full_reset(self):
+        self.reset_analysis()
+        self.reset_left_panel()
+        self.reset_plot_panel()
+        self.reset_right_panel()
+        self.reset_minima_toggle()

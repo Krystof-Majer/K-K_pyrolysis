@@ -11,7 +11,7 @@ class MinimaWidget(QWidget):
         self.tab_widget: QTabWidget = QTabWidget()
 
         main_layout = QVBoxLayout(self)
-        minima_table_group = QGroupBox("Local temperature minimas")
+        minima_table_group = QGroupBox("Local minima")
         vertical_layout = QVBoxLayout(minima_table_group)
         main_layout.addWidget(minima_table_group)
         vertical_layout.addWidget(self.tab_widget)

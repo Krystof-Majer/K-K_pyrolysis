@@ -13,5 +13,7 @@ class ReadDialog(QFileDialog):
             "Text files (*.txt)",
             "",
         )
-
-        return files
+        if files == ([], ""):
+            return None
+        elif files:
+            return files
