@@ -39,10 +39,10 @@ class Filter:
 
 
 HANNING = {
-    5.0: Filter(type="hanning", cutoff=0.2, winsize=191),
-    30.0: Filter(type="hanning", cutoff=2.5, winsize=41),
-    50.0: Filter(type="hanning", cutoff=3.6, winsize=33),
-    10.0: Filter(type="hanning", cutoff=0.25, winsize=87),
+    5.0: Filter(type="hanning", cutoff=0.1, winsize=191),
+    30.0: Filter(type="hanning", cutoff=1.2, winsize=41),
+    50.0: Filter(type="hanning", cutoff=1.6, winsize=33),
+    10.0: Filter(type="hanning", cutoff=0.15, winsize=87),
 }
 
 BLACKMAN = {
