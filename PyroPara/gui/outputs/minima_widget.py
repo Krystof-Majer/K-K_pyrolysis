@@ -21,7 +21,10 @@ class MinimaWidget(QWidget):
         data = round_all(sta_file.local_minima)
 
         beta = sta_file.beta
-        type = get_material(sta_file.name)
+        try:
+            type = get_material(sta_file.name)
+        except:
+            type = "Unspecified"
 
         self.model = TableModel(data)
         self.model.setHeaderData(0, Qt.Horizontal, "T (K)")
