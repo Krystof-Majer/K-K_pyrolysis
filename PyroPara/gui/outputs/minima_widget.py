@@ -31,4 +31,4 @@ class MinimaWidget(QWidget):
         self.model.setHeaderData(1, Qt.Horizontal, "1/s²")
 
         table.setModel(self.model)
-        self.tab_widget.addTab(table, f"{type} {beta} K/s")
+        self.tab_widget.addTab(table, f"{type} {beta} K/min")
