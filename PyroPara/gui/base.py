@@ -154,7 +154,6 @@ class PlotWidget(QWidget):
         legend: bool = False,
         **kwargs: Any,
     ) -> None:
-
         if clear:
             self.axis.clear()
 

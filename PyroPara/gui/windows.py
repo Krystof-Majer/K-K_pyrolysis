@@ -22,7 +22,6 @@ class MainWindow(QMainWindow):
         left_panel: LeftPanel = None,
         right_panel: RightPanel = None,
     ) -> None:
-
         super().__init__()
         self.plot_panel = plot_panel
         self.left_panel = left_panel

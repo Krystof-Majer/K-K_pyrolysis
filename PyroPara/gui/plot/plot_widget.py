@@ -2,7 +2,6 @@ from PyroPara.gui.base import PlotWidget, TabStatus
 
 
 class TgPlot(PlotWidget, TabStatus):
-
     X_LABEL = "T"
     Y_LABEL = "TG"
     X_UNIT = "K"
@@ -30,7 +29,6 @@ class TgPlot(PlotWidget, TabStatus):
 
 
 class DtgPlot(PlotWidget, TabStatus):
-
     X_LABEL = "T"
     Y_LABEL = "DTG"
     X_UNIT = "K"
@@ -59,7 +57,6 @@ class DtgPlot(PlotWidget, TabStatus):
 
 
 class DdtgPlot(PlotWidget, TabStatus):
-
     X_LABEL = "T"
     Y_LABEL = "DDTG"
     X_UNIT = "K"

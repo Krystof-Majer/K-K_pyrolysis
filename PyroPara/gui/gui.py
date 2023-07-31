@@ -61,11 +61,9 @@ class Gui:
 
         for file_new in files[0]:
             if files_present:
-
                 if_duplicate = False
 
                 for file_old in loaded_files:
-
                     if cmp(file_new, file_old):
                         if_duplicate = True
 

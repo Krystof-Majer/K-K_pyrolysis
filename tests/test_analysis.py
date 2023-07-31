@@ -13,7 +13,7 @@ def analysis():
 
 def test_load_all_files(analysis):
     analysis.load_all_files(DIRECTORY)
-    assert len(analysis) == 3
+    assert len(analysis) == 4
 
 
 def test_load_file(analysis):

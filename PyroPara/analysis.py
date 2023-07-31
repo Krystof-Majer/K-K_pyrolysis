@@ -30,7 +30,6 @@ class Analysis:
         self._default_filter = HANNING
 
         for path in files:
-
             # Retrieves heating rate (beta)
             beta = get_beta(path)
 

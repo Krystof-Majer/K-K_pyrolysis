@@ -9,7 +9,6 @@ class Filter:
         self.set_parameters(type=type, cutoff=cutoff, winsize=winsize)
 
     def apply(self, time: pd.array, mass: pd.array):
-
         """samples frequency of given data and filters with
            specified window with cuttof of half of Nqyst frequency
 
@@ -39,10 +38,10 @@ class Filter:
 
 
 HANNING = {
-    5.0: Filter(type="hanning", cutoff=0.1, winsize=191),
-    30.0: Filter(type="hanning", cutoff=1.2, winsize=41),
-    50.0: Filter(type="hanning", cutoff=1.6, winsize=33),
-    10.0: Filter(type="hanning", cutoff=0.15, winsize=87),
+    5.0: Filter(type="hamming", cutoff=0.1, winsize=191),
+    30.0: Filter(type="hamming", cutoff=2.5, winsize=41),
+    50.0: Filter(type="hamming", cutoff=1.6, winsize=33),
+    10.0: Filter(type="hamming", cutoff=0.15, winsize=87),
 }
 
 BLACKMAN = {
