@@ -23,7 +23,7 @@ class MinimaWidget(QWidget):
         beta = sta_file.beta
         try:
             type = get_material(sta_file.name)
-        except:
+        except Exception:
             type = "Unspecified"
 
         self.model = TableModel(data)
