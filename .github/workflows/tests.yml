@@ -19,9 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { name: Linux, python: '3.8', os: ubuntu-latest }
           - { name: Windows, python: '3.8', os: windows-latest }
-          - { name: Linux, python: '3.9', os: ubuntu-latest }
           - { name: Windows, python: '3.9', os: windows-latest }
 
     steps:
